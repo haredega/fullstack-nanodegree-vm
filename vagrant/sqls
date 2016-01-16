@@ -1,0 +1,129 @@
+SELECT t.cidade_cod as Cidade, AVG(t.chi) as avg_chi,
+      AVG(( t.chi - sub.a) * (t.chi - sub.a)) as var_chi, AVG(t.n_interrupcoes) as avg_interrupcoes,
+      AVG(t.n_interrupcoes) as avg_chi, AVG(( t.n_interrupcoes - sub.b) * (t.n_interrupcoes - sub.b)) as var_interrupcoes,
+      from Interrupcoes t, (SELECT AVG(chi) AS a, AVG(n_interrupcoes) as b FROM Interrupcoes) AS sub \
+
+
+join (select t.cidade_cod, avg(t.nOS) as t.mediaOS, AVG(( t.nOS - sub.a) * (t.nOs - sub.a)) as var_nOs FROM (SELECT a.conta as Conta, s.cidade as cidade_cod, count(*) as nOS  from eficacia_stc  a join cidades_abradee s on s.codigo=a.local_cod group by a.conta, s.cidade) as c, \
+       (SELECT s.cidade_cod, AVG(t.nOs) AS a FROM eficacia_stc as t join cidades_abradee as s on s.cidade_cod=t.local_cod) AS sub ) as stc \
+       on t.cidade_cod= stc.cidade_cod group by s.cidade_cod
+
+
+# Selecao avg e var CHI e I por cidade
+SELECT t.cidade_cod as Cidade, AVG(t.chi) as avg_chi, AVG(( t.chi - sub.a) * (t.chi - sub.a)) as var_chi, AVG(t.n_interrupcoes) as avg_interrupcoes, AVG(t.n_interrupcoes) as avg_chi, AVG(( t.n_interrupcoes - sub.b) * (t.n_interrupcoes - sub.b)) as var_interrupcoes\
+  from Interrupcoes t, (SELECT AVG(chi) AS a, AVG(n_interrupcoes) as b FROM Interrupcoes) AS sub group by t.cidade_cod
+
+#Seleção da cidade / conta / n_interrupcoes
+SELECT  s.cidade as cidade_cod, a.conta as Conta, count(*) as nOS, sum(Fora_prazo) as Fora_prazo, sum(Reprova) as Reprova  from eficacia_stc  a join cidades_abradee s on s.codigo=a.local_cod
+where Fora_prazo='1' or Reprova='1' GROUP BY a.conta, s.cidade
+
+#Seleção da média OS por Cidade
+(SELECT cidade_cod, avg(nOS) as avg_os
+FROM (SELECT  s.cidade as cidade_cod, a.conta as Conta, count(*) as nOS, sum(Fora_prazo) as Fora_prazo, sum(Reprova) as Reprova  from eficacia_stc  a join cidades_abradee s on s.codigo=a.local_cod
+where Fora_prazo='1' or Reprova='1' GROUP BY a.conta, s.cidade) as individual
+GROUP BY  cidade_cod)
+
+#Selecao avg var OS por cidade por cidade
+SELECT t.cidade_cod as Cidade, media.avg_os as avg_os, AVG(( t.nOS - media.avg_os) * (t.nOS - media.avg_os)) as var_os
+FROM  (SELECT  s.cidade as cidade_cod, a.conta as Conta, count(*) as nOS, sum(Fora_prazo) as Fora_prazo, sum(Reprova) as Reprova  from eficacia_stc  a join cidades_abradee s on s.codigo=a.local_cod where Fora_prazo='1' or Reprova='1' GROUP BY a.conta, s.cidade) as t INNER JOIN (SELECT cidade_cod, avg(nOS) as avg_os FROM (SELECT  s.cidade as cidade_cod, a.conta as Conta, count(*) as nOS, sum(Fora_prazo) as Fora_prazo, sum(Reprova) as Reprova  from eficacia_stc  a join cidades_abradee s on s.codigo=a.local_cod
+where Fora_prazo='1' or Reprova='1' GROUP BY a.conta, s.cidade) as individual
+GROUP BY  cidade_cod) as media
+ON media.cidade_cod=t.cidade_cod
+GROUP BY t.cidade_cod
+
+"""É o bom"""
+# com codigo cidade
+SELECT stc.codigo as codigo, interrup.avg_chi as avg_chi, interrup.var_chi as var_chi, interrup.avg_interrupcoes as avg_interrupcoes, interrup.var_interrupcoes as var_interrupcoes, stc.avg_os as avg_os, stc.var_os as var_os
+FROM
+(SELECT t.cidade_cod as Cidade, AVG(t.chi) as avg_chi, AVG(( t.chi - sub.a) * (t.chi - sub.a)) as var_chi, AVG(t.n_interrupcoes) as avg_interrupcoes, AVG(t.n_interrupcoes) as avg_chi, AVG(( t.n_interrupcoes - sub.b) * (t.n_interrupcoes - sub.b)) as var_interrupcoes
+  from Interrupcoes t, (SELECT AVG(chi) AS a, AVG(n_interrupcoes) as b FROM Interrupcoes) AS sub group by t.cidade_cod) as interrup
+JOIN
+(SELECT t.cidade_cod as Cidade, t.codigo as codigo, media.avg_os as avg_os, AVG(( t.nOS - media.avg_os) * (t.nOS - media.avg_os)) as var_os
+FROM  (SELECT  s.cidade as cidade_cod, s.codigo as codigo, a.conta as Conta, count(*) as nOS, sum(Fora_prazo) as Fora_prazo, sum(Reprova) as Reprova  from eficacia_stc  a join cidades_abradee s on s.codigo=a.local_cod where Fora_prazo='1' or Reprova='1' GROUP BY a.conta, s.cidade) as t INNER JOIN (SELECT cidade_cod, avg(nOS) as avg_os FROM (SELECT  s.cidade as cidade_cod, a.conta as Conta, count(*) as nOS, sum(Fora_prazo) as Fora_prazo, sum(Reprova) as Reprova  from eficacia_stc  a join cidades_abradee s on s.codigo=a.local_cod
+where Fora_prazo='1' or Reprova='1' GROUP BY a.conta, s.cidade) as individual
+GROUP BY  cidade_cod) as media
+ON media.cidade_cod=t.cidade_cod
+GROUP BY t.cidade_cod) as stc
+ON stc.Cidade=interrup.Cidade
+
+
+
+#Selecao ouvidoria por conta
+SELECT cidade, avg(nOs) as avg_ouvidoria
+FROM
+(SELECT rec.local_cod, s.cidade as cidade, rec.conta, count(rec.num_os) as nOS
+FROM ouvidoria as rec
+JOIN cidades_abradee as s on rec.local_cod = s.codigo
+GROUP BY rec.local_cod, rec.conta)
+group by cidade
+
+## Selecao dos pontos de calor
+
+#SELECAO dos pontos tipo equipamento
+# verificar os casos dos pontos sem coordenadas. exemplos: LIM07729, LIM09813, 09152-022
+SELECT
+    ca.codigo,
+    'EQUIPAMENTO' as tipo,
+    i.instalacao as identificacao,
+    ch.nox as nox,
+    ch.noy as noy,
+    round( ((i.chi-pl.avg_chi)/pl.std_chi)+ ((i.n_interrupcoes-pl.avg_interrupcoes)/pl.std_interrupcoes), 0)    as valor,
+    ((i.chi-pl.avg_chi)/pl.std_chi) as chi,
+    ((i.n_interrupcoes-pl.avg_interrupcoes)/pl.std_interrupcoes) as interrupcoes,
+    '0' as n_os,
+    '0' as ouvidoria,
+    'chi: '||round(((i.chi-pl.avg_chi)/pl.std_chi), 2)||' n_interrupcoes: '||round(((i.n_interrupcoes-pl.avg_interrupcoes)/pl.std_interrupcoes), 1) as descricao
+FROM interrupcoes as i JOIN cidades_abradee as ca ON ca.cidade=i.cidade_cod
+LEFT OUTER JOIN padrao_localidade as pl ON ca.codigo = pl.local_cod
+LEFT OUTER JOIN coordenadas_chaves as ch ON i.instalacao = ch.instalacao
+
+UNION ALL
+SELECT * FROM
+(SELECT
+    cc.local_cod as codigo,
+    'CLIENTE' as tipo,
+    coalesce(cc. conta, stc.conta, ou.conta) as identificacao,
+    cc.nox as nox,
+    cc.noy as noy,
+    coalesce(stc.Fora_prazo, 0)+coalesce(stc.Reprova, 0)+coalesce(ou.nOS,0)   as valor,
+    "0" as chi,
+    "0" as interrupcoes,
+     coalesce(stc.Fora_prazo, 0)+coalesce(stc.Reprova, 0) as n_os,
+     coalesce(ou.nOS, 0) as ouvidoria,
+     "STC Fora do prazo: "||coalesce(stc.Fora_prazo, 0)||" STC Reprova: "||coalesce(stc.Reprova, 0)||" Ouvidoria: "||coalesce(ou.nOS, 0) as descricao
+FROM coordenadas_clientes as cc
+LEFT OUTER JOIN
+(SELECT  s.cidade as cidade_cod, s.codigo as codigo, a.conta as Conta, count(*) as nOS, sum(Fora_prazo) as Fora_prazo, sum(Reprova) as Reprova  from eficacia_stc  a join cidades_abradee s on s.codigo=a.local_cod where Fora_prazo='1' or Reprova='1' GROUP BY a.conta, s.cidade)
+ as stc ON stc.conta=cc.conta
+LEFT OUTER JOIN
+(SELECT rec.local_cod, s.cidade as cidade, rec.conta as conta, count(rec.num_os) as nOS
+FROM ouvidoria as rec
+JOIN cidades_abradee as s on rec.local_cod = s.codigo
+GROUP BY rec.local_cod, rec.conta) as ou ON ou.conta=cc.conta)
+WHERE valor>1
+
+
+#SQL padrao com interrupcoes por cliente
+SELECT stc.codigo as codigo, interrup.avg_chi as avg_chi, interrup.var_chi as var_chi, interrup.avg_interrupcoes as avg_interrupcoes, interrup.var_interrupcoes as var_interrupcoes, stc.avg_os as avg_os, stc.var_os as var_os
+        FROM (SELECT t.cidade_cod as Cidade, AVG(t.chi) as avg_chi, AVG(( t.chi - sub.a) * (t.chi - sub.a)) as var_chi, AVG(t.n_interrupcoes) as avg_interrupcoes, AVG(t.n_interrupcoes) as avg_chi, AVG(( t.n_interrupcoes - sub.b) * (t.n_interrupcoes - sub.b)) as var_interrupcoes
+        FROM Interrupcoes t, (SELECT AVG(chi) AS a, AVG(n_interrupcoes) as b FROM Interrupcoes) AS sub group by t.cidade_cod) as interrup
+        JOIN (SELECT t.cidade_cod as Cidade, t.codigo as codigo, media.avg_os as avg_os, AVG(( t.nOS - media.avg_os) * (t.nOS - media.avg_os)) as var_os
+        FROM  (SELECT  s.cidade as cidade_cod, s.codigo as codigo, a.conta as Conta, count(*) as nOS, sum(Fora_prazo) as Fora_prazo, sum(Reprova) as Reprova  from eficacia_stc  a join cidades_abradee s on s.codigo=a.local_cod where Fora_prazo='1' or Reprova='1' GROUP BY a.conta, s.cidade) as t INNER JOIN (SELECT cidade_cod, avg(nOS) as avg_os FROM (SELECT  s.cidade as cidade_cod,
+         a.conta as Conta, count(*) as nOS, sum(Fora_prazo) as Fora_prazo, sum(Reprova) as Reprova  from eficacia_stc  a join cidades_abradee s on s.codigo=a.local_cod
+        where Fora_prazo='1' or Reprova='1' GROUP BY a.conta, s.cidade) as individual GROUP BY  cidade_cod) as media  ON media.cidade_cod=t.cidade_cod GROUP BY t.cidade_cod) as stc ON stc.Cidade=interrup.Cidade"
+
+#adicao da localidade dos clientes na tabela:
+
+
+
+from sqlalchemy import create_engine
+from sqlalchemy import Column, ForeignKey, Integer, String, Float, Date, BigInteger
+from sqlalchemy.orm import sessionmaker
+from sqlalchemy.ext.declarative import declarative_base
+from database_setup import *
+import sqlalchemy.exc
+from sqlalchemy.sql import text
+engine = create_engine('sqlite:///pesquisa_abradee.db')
+Base.metadata.bind=engine
+DBSession = sessionmaker(bind = engine)
+s = DBSession()

@@ -1,2 +1,4 @@
 #ignoring sensitive data
 vagrant/catalog/Elektro/
+vagrant/catalog/puppies/env
+vagrant/catalog/puppies/venv

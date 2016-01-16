@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+
+<html lang='pt'>
+<head>
+  <title>List view</title>
+  <link href='static/css/bootstrap.css' rel='stylesheet'>
+  <link href='static/css/village.css' rel='stylesheet'>
+</head>
+
+<body>
+  <nav class='navbar navbar-fixed-top' id='top'>
+    <div class='container-fluid'>
+      <div class='navbar-header'>
+        <a class='navbar-brand' href='index.html' >Puppy Shelter Village</a>
+        <a class='navbar-brand' href='kind'>\Our Puppies!</a>
+      </div>
+      <div class='navbar-collapse collapse'>
+          <form class="navbar-form navbar-right" id='search'>
+            <input type="text" class="form-control" placeholder="Search Kind of list">
+            <input type="submit" value="Submit" class="btn">
+          </form>
+      </div>
+    </div>
+  </nav>
+
+<div class='container'>
+  <div class='row'>
+    <div class='col-md-10 col-sm-9 main' id='viewing-list'>
+      <div class='row'>
+         <div class='col-md-3 col-sm-6'>
+            <div class='list'>
+              <h3><a href="#">Phoebe</a></h3>
+              <p>Some info</p>
+              <p>Some info</p>
+              <p>Some info</p>
+              <p><a href='#' id='edit'>Edit</a></p>     
+            </div>
+         </div>
+         <div class='col-md-3 col-sm-6'>
+            <div class='list'>
+              <h3><a href="#">Lola</a></h3>
+              <p>Some info</p>
+              <p>Some info</p>
+              <p>Some info</p>
+              <p><a href='#' id='edit'>Edit</a></p>     
+            </div>
+         </div>
+         <div class='col-md-3 col-sm-6'>
+            <div class='list'>
+              <h3><a href="#">Rex</a></h3>
+              <p>Some info</p>
+              <p>Some info</p>
+              <p>Some info</p>
+              <p><a href='#' id='edit'>Edit</a></p>
+            </div>
+       </div>
+       <div class='col-md-3 col-sm-6'>
+            <div class='list'>
+              <h3><a href="#">Tara</a></h3>
+              <p>Some info</p>
+              <p>Some info</p>
+              <p>Some info</p>
+              <p><a href='#' id='edit'>Edit</a></p>
+            </div>
+       </div>
+      </div>
+    </div>    
+    <div class='col-md-2 col-sm-3 sidebar-right'>
+      <a href="#" class='btn'>Login</a>
+      <!-- HIDDEN   <form class="navbar-form navbar-right" id='user-connection'>
+            Login: <input type="text" class="form-control" placeholder="login">
+            Password:<input type="text" class="form-control" placeholder="password">
+            <input type="submit" value="Submit" class="btn">
+          </form>
+           <form class="navbar-form navbar-right" id='user-connection'>
+           <input type="submit" value="Add a new puppy" class="btn">
+           </form>
+         -->
+      <ul class="nav nav-sidebar">
+         <li class="active"><a href="#">A <span class="sr-only"></span></a></li>
+         <li><a href="#">B</a></li>
+         <li><a href="#">C</a></li>
+         <li><a href="#">D</a></li>
+      </ul>
+
+
+    </div>
+      </div>
+</div>
+
+
+</body>
+</html>
