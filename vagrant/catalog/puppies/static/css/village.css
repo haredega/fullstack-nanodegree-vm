@@ -1,0 +1,125 @@
+/* Specific CSS for the Puppy Shelter Village Project */
+
+#login {
+    padding-right:15px;    
+}
+
+#branding {
+    font-size: 40px;    
+}
+
+.container {
+    max-width: 1024px;
+    margin-bottom: 50px;
+    padding-top: 80px;
+}
+
+#main_picture {
+    border-radius: 8px;
+    margin-top: 20px;
+    background-color:darkolivegreen;
+    color:beige;
+    font-size: 20px;
+    text-align: right;
+    height: 300px;
+    padding: 50px;
+}
+
+#puppies {
+    background-color: brown;
+    height: 150px;
+    border-radius: 8px;
+    padding:10px;
+    color:antiquewhite;
+    font-size: 20px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+#owners {
+    background-color: brown;
+    height: 150px;
+    border-radius: 8px;
+    margin:10px;
+}
+
+#filler {
+    height:150px;
+}
+
+#top {
+    background-color: forestgreen;
+    color:lightcoral;
+}
+#top a{
+    margin:2px;
+    color:lightcoral;
+    padding-left:0px;
+    padding-right: 0px;
+}
+
+.btn {
+    color:black;
+}
+
+.list {
+    background-color: dimgray;
+    border-radius: 8px;
+    padding-top: 5px;
+    align-content: center;    
+}
+.list p{
+    text-align: left;
+    padding-left: 25px;
+}
+
+.list *{
+    text-align: center;
+    color:whitesmoke;
+}
+.list p{
+    width: 100%;
+    text-align: :left;
+}
+.list p a{
+    width: 100%;
+    text-align: :right;
+}
+
+#viewing-list {
+    padding-top: 20px;
+}
+
+#edit {
+    padding-left: 70%;
+    text-align: left;
+}
+
+#profile {
+    padding-top: 50px;
+}
+#profile *{
+    font-size: 20px;
+}
+
+.puppy-sidebar {
+    width: 100%;
+    padding-left: 20px;
+    padding-top: 20px;
+}
+
+#button {
+    border-radius: 8px;
+    background-color:darkolivegreen;
+    padding: 10px;
+    text-align: center;
+}
+#button a{
+    color:aliceblue;
+}
+
+#profile-pic {
+    padding: 5px;
+    border-radius: 5%;
+    height: 230px;
+}

@@ -1,11 +1,20 @@
 #database setup file
 import sys
-from sqlalchemy import Column, ForeignKey, Integer, String, Date, Float
+from sqlalchemy import Column, ForeignKey, Integer, String, Date, Float, ForeignKeyConstraint
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
 
 Base = declarative_base()
+
+def dbConnect():
+    #connecting db
+    engine = create_engine('sqlite:///puppyshelter.db')
+    Base.metadata.bind=engine
+    DBSession = sessionmaker(bind = engine)
+    session = DBSession()
+    return session
 
 #Class setup
 class Shelter(Base):
@@ -18,6 +27,10 @@ class Shelter(Base):
     website = Column(String(250))
     id = Column(Integer, primary_key=True)
 
+    #V1 adds ocuppancy check for the shelters
+    def current_occupancy(self, session):
+        return session.query(Puppy).join("shelter").filter(Puppy.shelter_id==self.id).count()
+
 class Puppy(Base):
     __tablename__ = 'puppy'
     name = Column(String(80), nullable=False)
@@ -28,6 +41,26 @@ class Puppy(Base):
     weight = Column(Float(precision=2))
     shelter_id = Column(Integer, ForeignKey('shelter.id'))
     shelter = relationship(Shelter)
+
+#V1 adds puppy page  and owner table to the database schema
+class PuppyPage(Base):
+    __tablename__ = 'puppypage'
+    id = Column(Integer, primary_key=True)
+    url = Column(String(), nullable=False)
+    puppy_description = Column(String(140))
+    special_needs = Column(String(250))
+    #puppy_id = Column(Integer, ForeignKey('puppy.id'), primary_key=True)
+    #puppy = relationship(Puppy)
+    puppy_id = ForeignKeyConstraint('puppy_id', 'puppy.id', Puppy)
+
+class Owner(Base):
+    __tablename__ = 'owner'
+    id = Column(Integer, primary_key=True)
+    name = Column(String(40), nullable=False)
+    surname = Column(String(60), nullable=False)
+    gender =  Column(String(2), nullable=False)
+    age = Column(Integer, nullable=False)
+
 
 #insert at end of file
 engine = create_engine('sqlite:///puppyshelter.db')

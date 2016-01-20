@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+
+<html lang='pt'>
+<head>
+  <title>List view</title>
+  <link href='static/css/bootstrap.css' rel='stylesheet'>
+  <link href='static/css/village.css' rel='stylesheet'>
+</head>
+
+<body>
+  <nav class='navbar navbar-fixed-top'  id='top'>
+    <div class='container-fluid'>
+      <div class='navbar-header'>
+        <a class='navbar-brand' href='index.html'>Puppy Shelter Village</a>
+        <a class='navbar-brand' href='kind'  >\Our Puppies</a>
+        <a class='navbar-brand' href='kind'  >\Lola</a>
+      </div>
+      <div class='navbar-collapse collapse'>
+          <form class="navbar-form navbar-right" id='search'>
+            <input type="text" class="form-control" placeholder="Search All">
+            <input type="submit" value="Submit" class="btn">
+          </form>
+      </div>
+    </div>
+  </nav>
+
+<div class='container'>
+  <div class='row'>
+    <div class='col-md-10 col-sm-9 main'>
+      <div class='row'>
+        <div class='col-md-4 col-sm-4'>
+          <h2 >Lola</h2>
+          <img src='place-holder-600-500.png' class='img-responsive' id='profile-pic'>
+        </div>
+        <div class='col-md-8 col-sm-8' id='profile'>
+          <p>Her age</p>
+          <p>Color</p>
+          <p>Location <a href='shelteraddress'>Shelter 1</a></p>
+          <p>Other info</p>
+        </div>
+      </div>
+    </div>
+    <div class='col-md-2 col-sm-3 sidebar-right'>
+        <div class='puppy-sidebar'>
+          <p id='button'><a href="#" >Adopt!</a></p>
+          <!-- HIDDEN   <form class="navbar-form navbar-right" id='user-connection'>
+                Login: <input type="text" class="form-control" placeholder="login">
+                Password:<input type="text" class="form-control" placeholder="password">
+                <input type="submit" value="Submit" class="btn">
+              </form> -->
+          <ul class="nav nav-sidebar">
+             <li class="active"><a href="#">Subscription<span class="sr-only"></span></a></li>
+             <li><a href="#">Edit</a></li>
+             <li><a href="#">Delete</a></li>
+          </ul>        
+        </div>
+    </div>
+</div>
+</div>
+
+
+</body>
+</html>
