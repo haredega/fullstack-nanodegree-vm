@@ -12,8 +12,8 @@
     <div class='container-fluid'>
       <div class='navbar-header'>
         <a class='navbar-brand' href='{{url_for('index')}}'>Puppy Shelter Village</a>
-        <a class='navbar-brand' href='{{url_for('list_view', list_type=list_type )}}'  >\Our Puppies</a>
-        <a class='navbar-brand' href='{{url_for('item_view', list_type=list_type, item_id=item_id)}}'  >\{{item.Puppy.name}}</a>
+        <a class='navbar-brand' href='{{url_for('list_view', list_type=list_type )}}'  >\Our {{list_type}}</a>
+        <a class='navbar-brand' href='{{url_for('item_view', list_type=list_type, item_id=item_id)}}'  >\{{item.name}}</a>
       </div>
       <div class='navbar-collapse collapse'>
           <form class="navbar-form navbar-right" id='search'>
@@ -28,25 +28,21 @@
   <div class='row'>
     <div class='col-md-10 col-sm-9 main'>
       <div class='row'>
-        {% if list_type == puppies %}
         <div class='col-md-4 col-sm-4'>
-          <h2>{{item.Puppy.name}}</h2>
-          <img src='{{item.Puppy.picture}}' class='img-responsive' id='profile-pic'>
+          <h2>{{item.name}}</h2>
         </div>
         <div class='col-md-8 col-sm-8' id='profile'>
-          <p>Date of birth: {{item.Puppy.dateOfBirth}}</p>
-          <p>Gender: {{item.Puppy.gender}}</p>
-          <p>Weight: {{item.Puppy.weight}}</p>
-          <p>Location: <a href='{{item.Shelter.website}}'>{{item.Shelter.name}} </a></p>
+          <p>Address: {{item.address}}, {{item.city}}</p>
+          <p>State: {{item.state}}  </p>
+          <p>Zip Code: {{item.zipCode}}          </p>
+          <p>Website: <a href='{{item.website}}'>{{item.name}} </a></p>
           <p>Other info: ?</p>
         </div>
-        {% endif %}
       </div>
     </div>
     <div class='col-md-2 col-sm-3 sidebar-right'>
-      {% if list_type == puppies %}
-        <div class='puppy-sidebar'>
-          <p id='button'><a href="#" >Adopt!</a></p>
+        <div class='shelter-sidebar'>
+          <p id='button'><a href="#" >Get in touch!</a></p>
           <!-- HIDDEN   <form class="navbar-form navbar-right" id='user-connection'>
                 Login: <input type="text" class="form-control" placeholder="login">
                 Password:<input type="text" class="form-control" placeholder="password">
@@ -58,7 +54,6 @@
              <li><a href="#">Delete</a></li>
           </ul>
         </div>
-        {% endif %}
     </div>
 </div>
 </div>

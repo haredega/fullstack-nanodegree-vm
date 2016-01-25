@@ -12,7 +12,7 @@
     <div class='container-fluid'>
       <div class='navbar-header'>
         <a class='navbar-brand' href='{{url_for('index')}}'>Puppy Shelter Village</a>
-        <a class='navbar-brand' href='{{url_for('list_view', list_type=list_type )}}'  >\Our Puppies</a>
+        <a class='navbar-brand' href='{{url_for('list_view', list_type=list_type )}}'  >\Our {{list_type}}</a>
         <a class='navbar-brand' href='{{url_for('item_view', list_type=list_type, item_id=item_id)}}'  >\{{item.Puppy.name}}</a>
       </div>
       <div class='navbar-collapse collapse'>
@@ -28,7 +28,6 @@
   <div class='row'>
     <div class='col-md-10 col-sm-9 main'>
       <div class='row'>
-        {% if list_type == puppies %}
         <div class='col-md-4 col-sm-4'>
           <h2>{{item.Puppy.name}}</h2>
           <img src='{{item.Puppy.picture}}' class='img-responsive' id='profile-pic'>
@@ -40,11 +39,9 @@
           <p>Location: <a href='{{item.Shelter.website}}'>{{item.Shelter.name}} </a></p>
           <p>Other info: ?</p>
         </div>
-        {% endif %}
       </div>
     </div>
     <div class='col-md-2 col-sm-3 sidebar-right'>
-      {% if list_type == puppies %}
         <div class='puppy-sidebar'>
           <p id='button'><a href="#" >Adopt!</a></p>
           <!-- HIDDEN   <form class="navbar-form navbar-right" id='user-connection'>
@@ -58,7 +55,6 @@
              <li><a href="#">Delete</a></li>
           </ul>
         </div>
-        {% endif %}
     </div>
 </div>
 </div>

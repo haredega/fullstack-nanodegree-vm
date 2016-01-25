@@ -1,11 +1,11 @@
 /* Specific CSS for the Puppy Shelter Village Project */
 
 #login {
-    padding-right:15px;    
+    padding-right:15px;
 }
 
 #branding {
-    font-size: 40px;    
+    font-size: 40px;
 }
 
 .container {
@@ -66,7 +66,7 @@
     background-color: dimgray;
     border-radius: 8px;
     padding-top: 5px;
-    align-content: center;    
+    align-content: center;
 }
 .list p{
     text-align: left;

@@ -28,11 +28,11 @@
     <div class='col-md-10 col-sm-9 main' id='viewing-list'>
       <div class='row'>
       {% for item in items %}
-         <div class='col-md-3 col-sm-6' background-img='{{item.picture}}'>
-            <div class='list'>
-              <h3><a href="#">{{item.name}}</a></h3>
+         <div class='col-md-3 col-sm-6'>
+            <div class='list' style='background-image: url("{{item.picture}}")'>
+              <h3><a href="{{url_for('item_view', list_type = list_type, item_id=item.id)}}">{{item.name}}</a></h3>
               {% if list_type=='puppies' %}
-              <p>Age: {{ strftime("%m", (now-item.dateOfBirth) ) }}</p>
+              <p>Age: {{ item.dateOfBirth }}</p>
               <p>Gender: {{item.gender}}</p>
               <p>Weight: {{item.weight}}</p>
               <p><a href='puppies/{{item.id}}/edit' id='edit'>Edit</a></p>

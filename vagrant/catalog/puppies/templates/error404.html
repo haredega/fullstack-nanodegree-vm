@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+
+<html lang='pt'>
+<head>
+  <title>Error 404</title>
+  <link href="{{url_for('static', filename='css/bootstrap.css')}}" rel='stylesheet'>
+  <link href="{{url_for('static', filename='css/village.css')}}" rel='stylesheet'>
+</head>
+
+<body>
+  <nav class='navbar navbar-fixed-top' id='top'>
+    <div class='container-fluid'>
+      <div class='navbar-header'>
+        <a class='navbar-brand' href='{{url_for('index')}}' >Puppy Shelter Village</a>
+        <a class='navbar-brand' href='#'>Error 404!</a>
+      </div>
+    </div>
+  </nav>
+
+<div class='container'>
+<div class='jumbotron'>
+  <h1>Error 404!</h1>
+  <p>
+    Go back to the <a href='{{url_for('index')}}'>home</a> page!
+  </p>
+</div>
+</div>
+
+</body>
+</html>
