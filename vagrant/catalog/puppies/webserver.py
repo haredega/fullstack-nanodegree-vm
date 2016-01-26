@@ -3,7 +3,6 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from database_setup import Base, Puppy, PuppyPage, Shelter, Owner, dbConnect
 import datetime
-from time import strftime
 from numpy import size
 app = Flask(__name__)
 
@@ -54,7 +53,7 @@ def item_view(list_type, item_id):
 @app.route('/<string:list_type>/new', methods=['GET', 'POST'])
 def item_new(list_type):
     if request.method == 'GET':
-        if list_type in ['puppies', 'shelters', 'owners' :
+        if list_type in ['puppies', 'shelters', 'owners'] :
             template = list_type +'_add.html'
             puppies = session.query(Puppy).all()
             shelters = session.query(Shelter).all()
@@ -65,7 +64,7 @@ def item_new(list_type):
     elif request.method == 'POST':
         if list_type == 'puppies':
             thisshelter = session.query(Shelter).filter(Shelter.name==request.form['shelter']).first()
-            newItem = Puppy(name=request.form['name'], dateOfBirth=request.form['dateOfBirth'], gender=request.form['gender'],
+            newItem = Puppy(name=request.form['name'], dateOfBirth=datetime.datetime.strptime(request.form['dateOfBirth'], '%Y-%m-%d').date(), gender=request.form['gender'],
                  weight=request.form['weight'], picture=request.form['link'], shelter_id=thisshelter.id )
         elif list_type =='shelters':
             newItem = Shelter(name=request.form['name'], address=request.form['address'], city = request.form['city'],
@@ -81,7 +80,7 @@ def item_new(list_type):
 @app.route('/<string:list_type>/del/<int:item_id>', methods=['GET', 'POST'])
 def item_delete(list_type, item_id):
     if list_type == 'puppies':
-        item = session.query(Puppy, Shelter).filter(Puppy.id==item_id, Puppy.shelter_id==Shelter.id).first()
+        item = session.query(Puppy).filter(Puppy.id==item_id).first()
     elif list_type == 'shelters':
         item = session.query(Shelter).filter(Shelter.id==item_id).first()
     elif list_type == 'owners':
@@ -93,7 +92,7 @@ def item_delete(list_type, item_id):
             flash("Could not find the "+list_type+"!")
             return redirect(url_for('list_view', list_type=list_type))
         else:
-            ans = render_template('item_delete', list_type=list_type, item_id = item_id, item = item)
+            ans = render_template('item_delete.html', list_type=list_type, item_id = item_id, item = item)
             return ans
     elif request.method =='POST':
         session.delete(item)
@@ -104,7 +103,7 @@ def item_delete(list_type, item_id):
 @app.route('/<string:list_type>/edit/<int:item_id>', methods=['GET', 'POST'])
 def item_edit(list_type, item_id):
     if list_type == 'puppies':
-        item = session.query(Puppy, Shelter).filter(Puppy.id==item_id, Puppy.shelter_id==Shelter.id).first()
+        item = session.query(Puppy).filter(Puppy.id==item_id).first()
         template = 'puppies_edit.html'
     elif list_type == 'shelters':
         item = session.query(Shelter).filter(Shelter.id==item_id).first()
@@ -114,18 +113,21 @@ def item_edit(list_type, item_id):
         template = 'owners_edit.html'
     else:
         return render_template('error404.html')
+
+    shelters = session.query(Shelter).all()
+
     if request.method == 'GET':
-        ans = render_template( template, list_type=list_type, item_id = item_id, item = item)
+        ans = render_template( template, list_type=list_type, item_id = item_id, item = item, shelters=shelters)
         return ans
     elif request.method == 'POST':
         if list_type == 'puppies':
             item.name=request.form['name']
-            item.dateOfBirth=request.form['dateOfBirth']
+            item.dateOfBirth=datetime.datetime.strptime(request.form['dateOfBirth'], '%Y-%m-%d').date()
             item.gender=request.form['gender']
             item.weight=request.form['weight']
             item.picture=request.form['link']
-            thisshelter = session.query(Shelter).filter(Shelter.name==request.form['shelter']).first()
-            item.shelter_id= thisshelter.id
+            item.shelter_id = request.form['shelter']
+            print 'post 132'
         elif list_type =='shelters':
             item.name=request.form['name']
             item.address=request.form['address']
@@ -138,9 +140,12 @@ def item_edit(list_type, item_id):
             item.surname=request.form['surname']
             item.gender =request.form['gender']
             item.age = request.form['age']
+        print '3'
         session.add(item)
         session.commit()
+        print '4'
         flash("Succesfully edited the item!")
+        print '5'
         return redirect(url_for('list_view', list_type=list_type))
 
 

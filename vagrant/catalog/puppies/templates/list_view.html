@@ -35,20 +35,19 @@
               <p>Age: {{ item.dateOfBirth }}</p>
               <p>Gender: {{item.gender}}</p>
               <p>Weight: {{item.weight}}</p>
-              <p><a href='puppies/{{item.id}}/edit' id='edit'>Edit</a></p>
+              <p><a href='{{url_for('item_edit', list_type = list_type, item_id=item.id)}}' id='edit'>Edit</a></p>
               {% endif %}
               {% if list_type=='shelters' %}
               <p>Adress:{{item.address}}</p>
               <p>State: {{item.state}}</p>
               <p><a href='{{item.website}}'>Visit their website!</a></p>
-              <p><a href='shelters/{{item.id}}/edit' id='edit'>Edit</a></p>
+              <p><a href='{{url_for('item_edit', list_type = list_type, item_id=item.id)}}' id='edit'>Edit</a></p>
               {% endif %}
               {% if list_type=='owners' %}
               <p>Surname:{{item.surname}}</p>
               <p>Gender: {{item.gender}}</p>
               <p>Age: {{item.age}}</p>
-              <p><a href='{{item.website}}'>Visit their website!</a></p>
-              <p><a href='shelters/{{item.id}}/edit' id='edit'>Edit</a></p>
+              <p><a href='{{url_for('item_edit', list_type = list_type, item_id=item.id)}}' id='edit'>Edit</a></p>
               {% endif %}
             </div>
          </div>
@@ -57,6 +56,7 @@
   </div>
 
     <div class='col-md-2 col-sm-3'>
+
       <a href="#" class='btn'>Login</a>
       <!-- HIDDEN   <form class="navbar-form navbar-right" id='user-connection'>
             Login: <input type="text" class="form-control" placeholder="login">
@@ -67,11 +67,13 @@
            <input type="submit" value="Add a new puppy" class="btn">
            </form>
          -->
+
       <ul class="nav nav-sidebar">
          <li class="active"><a href="#">A <span class="sr-only"></span></a></li>
          <li><a href="#">B</a></li>
          <li><a href="#">C</a></li>
          <li><a href="#">D</a></li>
+         <a href='{{url_for('item_new', list_type = list_type)}}'>Add</a>
       </ul>
 
     </div>

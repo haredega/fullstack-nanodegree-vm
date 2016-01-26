@@ -13,7 +13,7 @@
       <div class='navbar-header'>
         <a class='navbar-brand' href='{{url_for('index')}}'>Puppy Shelter Village</a>
         <a class='navbar-brand' href='{{url_for('list_view', list_type=list_type )}}'  >\Edit Puppies</a>
-        <a class='navbar-brand' href='{{url_for('item_view', list_type=list_type, item_id=item_id)}}'  >\{{item.Puppy.name}}</a>
+        <a class='navbar-brand' href='{{url_for('item_view', list_type=list_type, item_id=item_id)}}'  >\{{item.name}}</a>
       </div>
     </div>
   </nav>
@@ -24,20 +24,20 @@
       <div class='row'>
         <div class='col-md-8 col-sm-8' id='profile'>
           <h1>Editing a new cat</h1>
-              <form method='POST' enctype='multipart/form-data' action='{{url_for('item_edit', list_type='puppies')}}'>
-                  <h2>Insert info about the recently arrived cat</h2>
+              <form method='POST' enctype='multipart/form-data' action='{{url_for('item_edit', list_type=list_type, item_id=item.id)}}'>
+                  <h2>What has changes about this cat?</h2>
                   Name: <input name="name" type="text" placeholder="{{item.name}}"><br>
-                  Date of Birth: <input name="dateOfBirth" type="date" placeholder="{{item.dateOfBirth}}"><br>
+                  Date of Birth: <input name="dateOfBirth" type="datetime" placeholder="{{item.dateOfBirth}}"><br>
                   <!-- TODO set combo box here -->
                   Gender: <input name="gender" type="text" placeholder="{{item.gender}}"><br>
                   Weight: <input name="weight" type="number" placeholder="{{item.weight}}"><br>
-                  Picture link: <input name="link" type="text" placeholder="{{item.link}}">
+                  Picture link: <input name="link" type="text" placeholder="{{item.link}}"><br>
                   Is he in a shelter? If so, which? <input name="shelter" list='all_shelters' >
                     <datalist id='all_shelters'>
                       {% for item in shelters %}
-                       <option value='{{item.name}}'>
+                       <option value='{{item.id}}'>{{item.name}}</option>
                       {% endfor %}
-                    </datalist>
+                    </datalist><br>
                   <input type="submit" value="Submit">
                   <a href="{{url_for('item_view', list_type=list_type, item_id=item_id)}}">Cancel</a>
               </form>

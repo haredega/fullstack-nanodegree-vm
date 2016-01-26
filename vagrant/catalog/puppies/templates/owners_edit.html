@@ -24,7 +24,7 @@
       <div class='row'>
         <div class='col-md-8 col-sm-8' id='profile'>
           <h1>Editing an Owner</h1>
-              <form method='POST' enctype='multipart/form-data' action='{{url_for('item_edit', list_type='owners')}}'>
+              <form method='POST' enctype='multipart/form-data' action='{{url_for('item_edit', list_type='owners', item_id=item.id)}}'>
                   <h2>Insert info about the person</h2>
                   Name: <input name="name" type="text" placeholder='{{item.name}}' ><br>
                   Surname: <input name="surname" type="text" placeholder='{{item.surname}}' ><br>
