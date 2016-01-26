@@ -54,18 +54,30 @@ def item_view(list_type, item_id):
 @app.route('/<string:list_type>/new', methods=['GET', 'POST'])
 def item_new(list_type):
     if request.method == 'GET':
-        return render_template('item_add.html', type=list_type)
-    #TODO - Find out how I can get the columns of a table
-    #TODO - Make getters to complete all of the item types
-    #TODO - Make a template for the add page
-    if request.method == 'POST':
-        item.name = request.form['edit-menu-name']
-        item.description=request.form['edit-menu-description']
-        item.price=request.form['edit-menu-price']
-        session.add(item)
+            if list_type in ['puppies', 'shelters', 'owners' :
+                #TODO puppies add template
+                #TODO shelters add template
+                #TODO owners add template
+                template = list_type +'_add.html'
+                puppies = session.query(Puppy).all()
+                shelters = session.query(Shelter).all()
+                owners = session.query(Owner).all()
+                return render_template( template, list_type=list_type, puppies = puppies, shelters = shelters, owners = owners)
+    elif request.method == 'POST':
+        if list_type == 'puppies':
+            thisshelter = session.query(Shelter).filter(Shelter.name==request.form['shelter']).first()
+            newItem = Puppy(name=request.form['name'], dateOfBirth=request.form['dateOfBirth'], gender=request.form['gender'],
+                 weight=request.form['weight'], picture=request.form['link'], shelter_id=thisshelter.id )
+        elif list_type =='shelters':
+            newItem = Shelter(name=request.form['name'], address=request.form['address'], city = request.form['city'],
+                state = request.form['state'], zipCode = request.form['zipCode'], website = request.form['website'])
+        elif list_type == 'owners':
+            newItem = Owner(name=request.form['name'], surname=request.form['surname'],
+                 gender =request.form['gender'], age = request.form['age'])
+        session.add(newItem)
         session.commit()
-        flash("Succesfully edited the menu item!")
-        return redirect(url_for('restaurantMenu', restaurant_id=restaurant_id))
+        flash("Succesfully added the new item!")
+        return redirect(url_for('list_view', list_type=list_type))
 
 #Starts Server
 if __name__ == '__main__':
