@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+
+<html lang='pt'>
+<head>
+  <title>Add Owner</title>
+  <link href='{{url_for('static', filename='css/bootstrap.css')}}' rel='stylesheet'>
+  <link href='{{url_for('static', filename='css/village.css')}}' rel='stylesheet'>
+</head>
+
+<body>
+  <nav class='navbar navbar-fixed-top'  id='top'>
+    <div class='container-fluid'>
+      <div class='navbar-header'>
+        <a class='navbar-brand' href='{{url_for('index')}}'>Puppy Shelter Village</a>
+        <a class='navbar-brand' href='{{url_for('list_view', list_type=list_type )}}'  >\Add Owner</a>
+      </div>
+    </div>
+  </nav>
+
+<div class='container'>
+  <div class='row'>
+    <div class='col-md-10 col-sm-9 main'>
+      <div class='row'>
+        <div class='col-md-8 col-sm-8' id='profile'>
+          <h1>Adding an Owner</h1>
+              <form method='POST' enctype='multipart/form-data' action='{{url_for('item_new', list_type='owners')}}'>
+                  <h2>Insert info about the person</h2>
+                  Name: <input name="name" type="text" ><br>
+                  Surname: <input name="surname" type="text" ><br>
+                  <!-- TODO ad combobox here -->
+                  Gender: <input name="gender" type="text" ><br>
+                  Age: <input name="age" type="number" ><br>
+                  <input type="submit" value="Submit">
+                  <a href="{{url_for('list_view', list_type='owners')}}">Cancel</a>
+              </form>
+        </div>
+      </div>
+    </div>
+</div>
+</div>
+
+
+</body>
+</html>

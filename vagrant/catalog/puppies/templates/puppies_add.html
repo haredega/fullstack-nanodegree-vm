@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+
+<html lang='pt'>
+<head>
+  <title>Adding puppies</title>
+  <link href='{{url_for('static', filename='css/bootstrap.css')}}' rel='stylesheet'>
+  <link href='{{url_for('static', filename='css/village.css')}}' rel='stylesheet'>
+</head>
+
+<body>
+  <nav class='navbar navbar-fixed-top'  id='top'>
+    <div class='container-fluid'>
+      <div class='navbar-header'>
+        <a class='navbar-brand' href='{{url_for('index')}}'>Puppy Shelter Village</a>
+        <a class='navbar-brand' href='{{url_for('list_view', list_type=list_type )}}'  >\Add Puppies</a>
+      </div>
+    </div>
+  </nav>
+
+<div class='container'>
+  <div class='row'>
+    <div class='col-md-10 col-sm-9 main'>
+      <div class='row'>
+        <div class='col-md-8 col-sm-8' id='profile'>
+          <h1>Adding a new cat</h1>
+              <form method='POST' enctype='multipart/form-data' action='{{url_for('item_new', list_type='puppies')}}'>
+                  <h2>Insert info about the recently arrived cat</h2>
+                  Name: <input name="name" type="text" ><br>
+                  Date of Birth: <input name="dateOfBirth" type="date" ><br>
+                  <! -- TODO set combo box here -->
+                  Gender: <input name="gender" type="text" ><br>
+                  Weight: <input name="weight" type="number" ><br>
+                  Picture link: <input name="link" type="text" >
+                  Is he in a shelter? If so, which? <input name="shelter" list='all_shelters' >
+                    <datalist id='all_shelters'>
+                      {% for item in shelters %}
+                       <option value='{{item.name}}'>
+                      {% endfor %}
+                    </datalist>
+                  <input type="submit" value="Submit">
+                  <a href="{{url_for('list_view', list_type='puppies')}}">Cancel</a>
+              </form>
+        </div>
+      </div>
+    </div>
+</div>
+</div>
+
+
+</body>
+</html>
