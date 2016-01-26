@@ -54,12 +54,14 @@ def item_view(list_type, item_id):
 @app.route('/<string:list_type>/new', methods=['GET', 'POST'])
 def item_new(list_type):
     if request.method == 'GET':
-            if list_type in ['puppies', 'shelters', 'owners' :
-                template = list_type +'_add.html'
-                puppies = session.query(Puppy).all()
-                shelters = session.query(Shelter).all()
-                owners = session.query(Owner).all()
-                return render_template( template, list_type=list_type, puppies = puppies, shelters = shelters, owners = owners)
+        if list_type in ['puppies', 'shelters', 'owners' :
+            template = list_type +'_add.html'
+            puppies = session.query(Puppy).all()
+            shelters = session.query(Shelter).all()
+            owners = session.query(Owner).all()
+            return render_template( template, list_type=list_type, puppies = puppies, shelters = shelters, owners = owners)
+        else:
+            return render_template('error404.html')
     elif request.method == 'POST':
         if list_type == 'puppies':
             thisshelter = session.query(Shelter).filter(Shelter.name==request.form['shelter']).first()
@@ -77,7 +79,7 @@ def item_new(list_type):
         return redirect(url_for('list_view', list_type=list_type))
 
 @app.route('/<string:list_type>/del/<int:item_id>', methods=['GET', 'POST'])
-def item_view(list_type, item_id):
+def item_delete(list_type, item_id):
     if list_type == 'puppies':
         item = session.query(Puppy, Shelter).filter(Puppy.id==item_id, Puppy.shelter_id==Shelter.id).first()
     elif list_type == 'shelters':
@@ -97,6 +99,50 @@ def item_view(list_type, item_id):
         session.delete(item)
         session.commit()
         return redirect(url_for('list_view', list_type=list_type))
+
+
+@app.route('/<string:list_type>/edit/<int:item_id>', methods=['GET', 'POST'])
+def item_edit(list_type, item_id):
+    if list_type == 'puppies':
+        item = session.query(Puppy, Shelter).filter(Puppy.id==item_id, Puppy.shelter_id==Shelter.id).first()
+        template = 'puppies_edit.html'
+    elif list_type == 'shelters':
+        item = session.query(Shelter).filter(Shelter.id==item_id).first()
+        template = 'shelters_edit.html'
+    elif list_type == 'owners':
+        item = session.query(Owner).filter(Owner.id==item_id).first()
+        template = 'owners_edit.html'
+    else:
+        return render_template('error404.html')
+    if request.method == 'GET':
+        ans = render_template( template, list_type=list_type, item_id = item_id, item = item)
+        return ans
+    elif request.method == 'POST':
+        if list_type == 'puppies':
+            item.name=request.form['name']
+            item.dateOfBirth=request.form['dateOfBirth']
+            item.gender=request.form['gender']
+            item.weight=request.form['weight']
+            item.picture=request.form['link']
+            thisshelter = session.query(Shelter).filter(Shelter.name==request.form['shelter']).first()
+            item.shelter_id= thisshelter.id
+        elif list_type =='shelters':
+            item.name=request.form['name']
+            item.address=request.form['address']
+            item.city = request.form['city']
+            item.state = request.form['state']
+            item.zipCode = request.form['zipCode']
+            item.website = request.form['website']
+        elif list_type == 'owners':
+            item.name=request.form['name']
+            item.surname=request.form['surname']
+            item.gender =request.form['gender']
+            item.age = request.form['age']
+        session.add(item)
+        session.commit()
+        flash("Succesfully edited the item!")
+        return redirect(url_for('list_view', list_type=list_type))
+
 
 
 #Starts Server

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+
+<html lang='pt'>
+<head>
+  <title>Edit Shelter</title>
+  <link href='{{url_for('static', filename='css/bootstrap.css')}}' rel='stylesheet'>
+  <link href='{{url_for('static', filename='css/village.css')}}' rel='stylesheet'>
+</head>
+
+<body>
+  <nav class='navbar navbar-fixed-top'  id='top'>
+    <div class='container-fluid'>
+      <div class='navbar-header'>
+        <a class='navbar-brand' href='{{url_for('index')}}'>Puppy Shelter Village</a>
+        <a class='navbar-brand' href='{{url_for('list_view', list_type=list_type )}}'  >\Edit Shelter</a>
+        <a class='navbar-brand' href='{{url_for('item_view', list_type=list_type, item_id=item_id)}}'  >\{{item.name}}</a>
+      </div>
+    </div>
+  </nav>
+
+<div class='container'>
+  <div class='row'>
+    <div class='col-md-10 col-sm-9 main'>
+      <div class='row'>
+        <div class='col-md-8 col-sm-8' id='profile'>
+          <h1>Adding a shelter</h1>
+              <form method='POST' enctype='multipart/form-data' action='{{url_for('item_edit', list_type='shelters', item_id=item_id)}}'>
+                  <h2>Shelter's info</h2>
+                  Name: <input name="name" type="text" placeholder='{{item.name}}' ><br>
+                  Address: <input name="address" type="text" placeholder='{{item.address}}'><br>
+                  City: <input name="city" type="text" placeholder='{{item.city}}'><br>
+                  State: <input name="state" type="text" placeholder='{{item.state}}'><br>
+                  Zip Code: <input name="zipCode" type="text" placeholder='{{item.zipCode}}'>
+                  Website: <input name="website" type='text' placeholder='{{item.website}}' >
+                  <input type="submit" value="Submit">
+                  <a href="{{url_for('item_view', list_type=list_type, item_id=item_id)}}">Cancel</a>
+              </form>
+        </div>
+      </div>
+    </div>
+</div>
+</div>
+
+
+</body>
+</html>
