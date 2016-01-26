@@ -41,6 +41,8 @@ class Puppy(Base):
     weight = Column(Float(precision=2))
     shelter_id = Column(Integer, ForeignKey('shelter.id'))
     shelter = relationship(Shelter)
+    owner_id = Column(Integer, ForeignKey('owner.id'))
+    owner = relationship("Owner")
 
 #V1 adds puppy page  and owner table to the database schema
 class PuppyPage(Base):
@@ -60,6 +62,7 @@ class Owner(Base):
     surname = Column(String(60), nullable=False)
     gender =  Column(String(2), nullable=False)
     age = Column(Integer, nullable=False)
+    puppy= relationship("Puppy")
 
 
 #insert at end of file

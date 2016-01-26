@@ -36,14 +36,23 @@
           <p>Date of birth: {{item.Puppy.dateOfBirth}}</p>
           <p>Gender: {{item.Puppy.gender}}</p>
           <p>Weight: {{item.Puppy.weight}}</p>
+          {% if item.Puppy.shelter_id is not none %}
           <p>Location: <a href='{{item.Shelter.website}}'>{{item.Shelter.name}} </a></p>
+          {% endif %}
+          {% if item.Puppy.owner_id is not none %}
+          <p>Owner id: <a href='{{url_for('item_view', list_type='owners', item_id=item.Puppy.owner_id)}}'>
+            {{item.Owner.name}}, {{item.Owner.age}} years</a>
+          </p>
+          {% endif %}
           <p>Other info: ?</p>
         </div>
       </div>
     </div>
     <div class='col-md-2 col-sm-3 sidebar-right'>
         <div class='puppy-sidebar'>
-          <p id='button'><a href="#" >Adopt!</a></p>
+          {% if item.Puppy.owner_id is none %}
+          <p id='button'><a href="{{url_for('adopt', list_type=list_type, item_id=item_id)}}" >Adopt!</a></p>
+          {% endif %}
           <!-- HIDDEN   <form class="navbar-form navbar-right" id='user-connection'>
                 Login: <input type="text" class="form-control" placeholder="login">
                 Password:<input type="text" class="form-control" placeholder="password">

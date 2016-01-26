@@ -33,14 +33,25 @@ def list_view(list_type):
 @app.route('/<string:list_type>/<int:item_id>')
 def item_view(list_type, item_id):
     if list_type == 'puppies':
-        item = session.query(Puppy, Shelter).filter(Puppy.id==item_id, Puppy.shelter_id==Shelter.id).first()
+        q1 = session.query(Puppy, Shelter, Owner).filter(Puppy.id==item_id, Puppy.shelter_id==Shelter.id, Puppy.owner_id==Owner.id).first()
+        q2 = session.query(Puppy, Shelter, Owner).filter(Puppy.id==item_id, Shelter.id==1, Puppy.owner_id==Owner.id).first()
+        q3 =session.query(Puppy, Shelter, Owner).filter(Puppy.id==item_id, Puppy.shelter_id==Shelter.id, Owner.id==1).first()
+        #If there's no corresponding Shelter, we'll send whatever shelter to the template
+        if q1 is not None:
+            item = q1
+        elif q2 is not None:
+            item = q2
+        elif q3 is not None:
+            item = q3
         template='puppy_view.html'
     elif list_type == 'shelters':
         item = session.query(Shelter).filter(Shelter.id==item_id).first()
         template = 'shelter_view.html'
     elif list_type == 'owners':
         item = session.query(Owner).filter(Owner.id==item_id).first()
+        pets = session.query(Puppy).filter(Puppy.owner_id==item.id).all()
         template= 'owner_view.html'
+        return render_template(template, list_type=list_type, item_id = item_id, item = item, pets=pets)
     else:
         return render_template('error404.html')
     if item is None:
@@ -147,6 +158,34 @@ def item_edit(list_type, item_id):
         flash("Succesfully edited the item!")
         print '5'
         return redirect(url_for('list_view', list_type=list_type))
+
+@app.route('/<string:list_type>/adopt/<int:item_id>')
+def adopt(list_type, item_id):
+    if list_type == 'puppies':
+        puppy = session.query(Puppy).filter(Puppy.id==item_id).first()
+        if puppy is not None:
+            owners = session.query(Owner).all()
+            return render_template('adopt.html', puppy=puppy, owners = owners, item_id=item_id, list_type=list_type)
+        else:
+            return render_template('error404.html')
+    else:
+        return render_template('error404.html')
+
+@app.route('/<string:list_type>/adopt/<int:item_id>/<int:owner_id>/confirm', methods=['GET', 'POST'])
+def adopt_confirm(list_type, item_id, owner_id):
+    puppy = session.query(Puppy).filter(Puppy.id==item_id).first()
+    owner = session.query(Owner).filter(Owner.id==owner_id).first()
+    if list_type =='puppies' and puppy is not None and owner is not None:
+        if request.method =='GET':
+            return render_template('adopt_confirm.html', puppy=puppy, owner = owner, item_id=item_id, list_type=list_type)
+        elif request.method == 'POST':
+            puppy.owner_id = owner_id
+            puppy.shelter_id =None
+            session.add(puppy)
+            session.commit()
+            return redirect(url_for('item_view', list_type=list_type, item_id=item_id))
+    else:
+        return render_template('error404.html')
 
 
 

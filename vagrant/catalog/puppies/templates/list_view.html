@@ -28,29 +28,39 @@
     <div class='col-md-10 col-sm-9 main' id='viewing-list'>
       <div class='row'>
       {% for item in items %}
-         <div class='col-md-3 col-sm-6'>
-            <div class='list' style='background-image: url("{{item.picture}}")'>
+              {% if list_type=='puppies' and item.owner_id is none %}
+              <div class='col-md-3 col-sm-6'>
+              <div class='list' style='background-image: url("{{item.picture}}")'>
               <h3><a href="{{url_for('item_view', list_type = list_type, item_id=item.id)}}">{{item.name}}</a></h3>
-              {% if list_type=='puppies' %}
               <p>Age: {{ item.dateOfBirth }}</p>
               <p>Gender: {{item.gender}}</p>
               <p>Weight: {{item.weight}}</p>
               <p><a href='{{url_for('item_edit', list_type = list_type, item_id=item.id)}}' id='edit'>Edit</a></p>
+              </div>
+              </div>
               {% endif %}
               {% if list_type=='shelters' %}
+              <div class='col-md-3 col-sm-6'>
+              <div class='list' style='background-image: url("{{item.picture}}")'>
+              <h3><a href="{{url_for('item_view', list_type = list_type, item_id=item.id)}}">{{item.name}}</a></h3>
               <p>Adress:{{item.address}}</p>
               <p>State: {{item.state}}</p>
               <p><a href='{{item.website}}'>Visit their website!</a></p>
               <p><a href='{{url_for('item_edit', list_type = list_type, item_id=item.id)}}' id='edit'>Edit</a></p>
+              </div>
+              </div>
               {% endif %}
               {% if list_type=='owners' %}
+              <div class='col-md-3 col-sm-6'>
+              <div class='list' style='background-image: url("{{item.picture}}")'>
+              <h3><a href="{{url_for('item_view', list_type = list_type, item_id=item.id)}}">{{item.name}}</a></h3>
               <p>Surname:{{item.surname}}</p>
               <p>Gender: {{item.gender}}</p>
               <p>Age: {{item.age}}</p>
               <p><a href='{{url_for('item_edit', list_type = list_type, item_id=item.id)}}' id='edit'>Edit</a></p>
+              </div>
+              </div>
               {% endif %}
-            </div>
-         </div>
       {% endfor %}
     </div>
   </div>

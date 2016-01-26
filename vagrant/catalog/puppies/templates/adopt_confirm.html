@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+
+<html lang='pt'>
+<head>
+  <title>Confirm Adoption</title>
+  <link href='{{url_for('static', filename='css/bootstrap.css')}}' rel='stylesheet'>
+  <link href='{{url_for('static', filename='css/village.css')}}' rel='stylesheet'>
+</head>
+
+<body>
+  <nav class='navbar navbar-fixed-top'  id='top'>
+    <div class='container-fluid'>
+      <div class='navbar-header'>
+        <a class='navbar-brand' href='{{url_for('index')}}'>Puppy Shelter Village</a>
+        <a class='navbar-brand' href='{{url_for('adopt', list_type=list_type, item_id=item_id )}}'  >Confirm Adoption</a>
+      </div>
+    </div>
+  </nav>
+
+<div class='container'>
+  <div class='row'>
+    <div class='col-md-10 col-sm-9 main'>
+      <div class='row'>
+        <div class='col-md-8 col-sm-8' id='profile'>
+          <h1>{{puppy.name}} is getting adopted!</h1>
+              <form method='POST' enctype='multipart/form-data' action='{{url_for('adopt_confirm', list_type=list_type, item_id=item_id, owner_id=owner.id)}}'>
+                  <h2>Are you sure that {{owner.name}} will take good care of {{puppy.name }}??</h2>
+                  <input type="submit" value="Sure! Adopt!">
+                  <a href="{{url_for('adopt', list_type=list_type, item_id=item_id)}}">Cancel</a>
+              </form>
+        </div>
+      </div>
+    </div>
+</div>
+</div>
+
+
+</body>
+</html>
