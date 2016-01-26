@@ -55,9 +55,6 @@ def item_view(list_type, item_id):
 def item_new(list_type):
     if request.method == 'GET':
             if list_type in ['puppies', 'shelters', 'owners' :
-                #TODO puppies add template
-                #TODO shelters add template
-                #TODO owners add template
                 template = list_type +'_add.html'
                 puppies = session.query(Puppy).all()
                 shelters = session.query(Shelter).all()
@@ -78,6 +75,29 @@ def item_new(list_type):
         session.commit()
         flash("Succesfully added the new item!")
         return redirect(url_for('list_view', list_type=list_type))
+
+@app.route('/<string:list_type>/del/<int:item_id>', methods=['GET', 'POST'])
+def item_view(list_type, item_id):
+    if list_type == 'puppies':
+        item = session.query(Puppy, Shelter).filter(Puppy.id==item_id, Puppy.shelter_id==Shelter.id).first()
+    elif list_type == 'shelters':
+        item = session.query(Shelter).filter(Shelter.id==item_id).first()
+    elif list_type == 'owners':
+        item = session.query(Owner).filter(Owner.id==item_id).first()
+    else:
+        return render_template('error404.html')
+    if request.method == 'GET':
+        if item is None:
+            flash("Could not find the "+list_type+"!")
+            return redirect(url_for('list_view', list_type=list_type))
+        else:
+            ans = render_template('item_delete', list_type=list_type, item_id = item_id, item = item)
+            return ans
+    elif request.method =='POST':
+        session.delete(item)
+        session.commit()
+        return redirect(url_for('list_view', list_type=list_type))
+
 
 #Starts Server
 if __name__ == '__main__':
