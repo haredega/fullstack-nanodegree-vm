@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+
+<html lang='pt'>
+<head>
+  <title>Set Adoption</title>
+  <link href='{{url_for('static', filename='css/bootstrap.css')}}' rel='stylesheet'>
+  <link href='{{url_for('static', filename='css/village.css')}}' rel='stylesheet'>
+</head>
+
+<body>
+  <nav class='navbar navbar-fixed-top'  id='top'>
+    <div class='container-fluid'>
+      <div class='navbar-header'>
+        <a class='navbar-brand' href='{{url_for('index')}}'>Puppy Shelter Village</a>
+        <a class='navbar-brand' href='{{url_for('balance_population')}}'  >Balance Shelter Population</a>
+      </div>
+      <div class='navbar-collapse collapse'>
+          <form class="navbar-form navbar-right" id='search'>
+            <input type="text" class="form-control" placeholder="Search All">
+            <input type="submit" value="Submit" class="btn">
+          </form>
+      </div>
+    </div>
+  </nav>
+
+  <div class='container'>
+    <div class='row'>
+      <div class='col-md-10 col-sm-9 main'>
+        <div class='row'>
+          <div class='col-md-4 col-sm-4'>
+            <div class='row'>
+              <h1>Procedure to balance the puppy shelter population.</h1>
+              <p> Average population is {{avg_occupancy}}   </p>
+              <table>
+                <thead>
+                  <th> Shelter </th>
+                  <th> should give to </th>
+                  <th> a total of </th>
+                  <th> link to the shelter page </th>
+                </thead>
+                <tbody>
+                  {% for item in exchanges %}
+                  <tr>
+                    <td>{{item[0]}}</td>
+                    <td>{{item[1]}}</td>
+                    <td><a href='{{url_for('puppies_filtered', item_id=item[0] )}}'> {{item[2]}} </a></td>
+                    <td><a href='{{url_for('item_view', item_id = item[0], list_type='shelter')}}'>+</a></td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

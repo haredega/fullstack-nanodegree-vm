@@ -40,6 +40,34 @@
           <p> Has already adopted: ?   </p>
         </div>
       </div>
+      {% if pets is not none %}
+      <div class='row'>
+        {% for pet in pets %}
+        <div class='col-md-3 col-sm-6'>
+        <div class='list' style='background-image: url("{{pet.picture}}")'>
+        <h3><a href="{{url_for('item_view', list_type = 'puppies', item_id=pet.id)}}">{{pet.name}}</a></h3>
+        <p>Age: {{ pet.dateOfBirth }}</p>
+        <p>Gender: {{pet.gender}}</p>
+        <p>Weight: {{pet.weight}}</p>
+        {% if pet.shelter_id is not none %}
+        <p>This pet is still assigned to a <a href='{{url_for('list_view', list_type='shelters')}}'>Shelter!!</a>!!</p>
+        {% endif %}
+        <p><a href='{{url_for('return_puppy', item_id=pet.id, owner_id=item.id)}}' id='return'>Return pet</a></p>
+
+        <p><a href='{{url_for('item_edit', list_type = 'puppies', item_id=pet.id)}}' id='edit'>Edit</a></p>
+        </div>
+        </div>
+        <!-- Testing layout
+        <div class='col-md-6 col-sm-6' id='pets'>
+          <p>Name: {{pet.name}}</p>
+          <p>Date of birth: {{pet.dateOfBirth}}</p>
+          <p>Gender: {{pet.gender}}</p>
+          <p>Weight: {{pet.weight}}</p>
+        </div> -->
+        {% endfor %}
+      </div>
+      {% endif %}
+
     </div>
     <div class='col-md-2 col-sm-3 sidebar-right'>
         <div class='owner-sidebar'>

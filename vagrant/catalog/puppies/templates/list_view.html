@@ -28,29 +28,39 @@
     <div class='col-md-10 col-sm-9 main' id='viewing-list'>
       <div class='row'>
       {% for item in items %}
-         <div class='col-md-3 col-sm-6'>
-            <div class='list' style='background-image: url("{{item.picture}}")'>
+              {% if list_type=='puppies' and item.owner_id is none %}
+              <div class='col-md-3 col-sm-6'>
+              <div class='list' style='background-image: url("{{item.picture}}")'>
               <h3><a href="{{url_for('item_view', list_type = list_type, item_id=item.id)}}">{{item.name}}</a></h3>
-              {% if list_type=='puppies' %}
               <p>Age: {{ item.dateOfBirth }}</p>
               <p>Gender: {{item.gender}}</p>
               <p>Weight: {{item.weight}}</p>
               <p><a href='{{url_for('item_edit', list_type = list_type, item_id=item.id)}}' id='edit'>Edit</a></p>
+              </div>
+              </div>
               {% endif %}
               {% if list_type=='shelters' %}
+              <div class='col-md-3 col-sm-6'>
+              <div class='list' style='background-image: url("{{item.picture}}")'>
+              <h3><a href="{{url_for('item_view', list_type = list_type, item_id=item.id)}}">{{item.name}}</a></h3>
               <p>Adress:{{item.address}}</p>
               <p>State: {{item.state}}</p>
               <p><a href='{{item.website}}'>Visit their website!</a></p>
               <p><a href='{{url_for('item_edit', list_type = list_type, item_id=item.id)}}' id='edit'>Edit</a></p>
+              </div>
+              </div>
               {% endif %}
               {% if list_type=='owners' %}
+              <div class='col-md-3 col-sm-6'>
+              <div class='list' style='background-image: url("{{item.picture}}")'>
+              <h3><a href="{{url_for('item_view', list_type = list_type, item_id=item.id)}}">{{item.name}}</a></h3>
               <p>Surname:{{item.surname}}</p>
               <p>Gender: {{item.gender}}</p>
               <p>Age: {{item.age}}</p>
               <p><a href='{{url_for('item_edit', list_type = list_type, item_id=item.id)}}' id='edit'>Edit</a></p>
+              </div>
+              </div>
               {% endif %}
-            </div>
-         </div>
       {% endfor %}
     </div>
   </div>
@@ -58,6 +68,7 @@
     <div class='col-md-2 col-sm-3'>
 
       <a href="#" class='btn'>Login</a>
+      <a href='{{url_for('item_new', list_type = list_type)}}'>Add</a>
       <!-- HIDDEN   <form class="navbar-form navbar-right" id='user-connection'>
             Login: <input type="text" class="form-control" placeholder="login">
             Password:<input type="text" class="form-control" placeholder="password">
@@ -67,13 +78,15 @@
            <input type="submit" value="Add a new puppy" class="btn">
            </form>
          -->
-
-      <ul class="nav nav-sidebar">
-         <li class="active"><a href="#">A <span class="sr-only"></span></a></li>
-         <li><a href="#">B</a></li>
-         <li><a href="#">C</a></li>
-         <li><a href="#">D</a></li>
-         <a href='{{url_for('item_new', list_type = list_type)}}'>Add</a>
+      <!-- TODO Add to css a .hover class so that it is hidden when not hover and auto when on hover -->
+      <ul class="nav nav-sidebar" style='max-height:300px; overflow:auto;'>
+        {% for each in alphabet %}
+         <li><a href=
+           {% if list_type == 'puppies' %}
+           '{{url_for('puppies_aZ', letter = each)}}'
+           {% endif %}
+           >{{each}}<span class="sr-only"></span></a></li>
+        {% endfor %}
       </ul>
 
     </div>
