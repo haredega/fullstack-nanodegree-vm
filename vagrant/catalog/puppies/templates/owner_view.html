@@ -52,6 +52,8 @@
         {% if pet.shelter_id is not none %}
         <p>This pet is still assigned to a <a href='{{url_for('list_view', list_type='shelters')}}'>Shelter!!</a>!!</p>
         {% endif %}
+        <p><a href='{{url_for('return_puppy', item_id=pet.id, owner_id=item.id)}}' id='return'>Return pet</a></p>
+
         <p><a href='{{url_for('item_edit', list_type = 'puppies', item_id=pet.id)}}' id='edit'>Edit</a></p>
         </div>
         </div>

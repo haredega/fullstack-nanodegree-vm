@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+
+<html lang='pt'>
+<head>
+  <title>Cancel Adoption</title>
+  <link href='{{url_for('static', filename='css/bootstrap.css')}}' rel='stylesheet'>
+  <link href='{{url_for('static', filename='css/village.css')}}' rel='stylesheet'>
+</head>
+
+<body>
+  <nav class='navbar navbar-fixed-top'  id='top'>
+    <div class='container-fluid'>
+      <div class='navbar-header'>
+        <a class='navbar-brand' href='{{url_for('index')}}'>Puppy Shelter Village</a>
+        <a class='navbar-brand' href='{{url_for('item_view', list_type='puppies', item_id=owner.id )}}'  >Cancel Adoption</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class='container'>
+    <div class='row'>
+      <div class='col-md-10 col-sm-9 main'>
+        <div class='row'>
+          <div class='col-md-8 col-sm-8' id='profile'>
+            <h1>Are you sure to return {{puppy.name}}?</h1>
+                <form method='POST' enctype='multipart/form-data' action='{{url_for('return_puppy', item_id=puppy.id, owner_id=owner.id)}}'>
+                    <h2>To what shelter is {{owner.name}} returning {{puppy.name }}??</h2>
+                    <input name="shelter" list='all_shelters' >
+                      <datalist id='all_shelters'>
+                        {% for item in shelters %}
+                         <option value='{{item.id}}'>{{item.name}}</option>
+                        {% endfor %}
+                      </datalist><br>
+                    <input type="submit" value="Yes">
+                    <a href="{{url_for('item_view', list_type='owners', item_id=owner.id)}}">Cancel</a>
+                </form>
+          </div>
+        </div>
+      </div>
+  </div>
+  </div>
+  </body>
+  </html>

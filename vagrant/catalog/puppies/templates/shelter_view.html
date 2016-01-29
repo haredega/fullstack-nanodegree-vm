@@ -35,8 +35,8 @@
           <p>Address: {{item.address}}, {{item.city}}</p>
           <p>State: {{item.state}}  </p>
           <p>Zip Code: {{item.zipCode}}          </p>
-          <p>Website: <a href='{{item.website}}'>{{item.name}} </a></p>
-          <p>Other info: ?</p>
+          <p>Website: <a href='{{item.website}}'>{{item.name}} </a></p><br>
+          <p><a href='{{url_for('puppies_filtered', item_id = item.id)}}' id='view'> See our puppies!</a></p>
         </div>
       </div>
     </div>

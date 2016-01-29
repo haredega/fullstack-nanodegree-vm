@@ -68,6 +68,7 @@
     <div class='col-md-2 col-sm-3'>
 
       <a href="#" class='btn'>Login</a>
+      <a href='{{url_for('item_new', list_type = list_type)}}'>Add</a>
       <!-- HIDDEN   <form class="navbar-form navbar-right" id='user-connection'>
             Login: <input type="text" class="form-control" placeholder="login">
             Password:<input type="text" class="form-control" placeholder="password">
@@ -77,13 +78,15 @@
            <input type="submit" value="Add a new puppy" class="btn">
            </form>
          -->
-
-      <ul class="nav nav-sidebar">
-         <li class="active"><a href="#">A <span class="sr-only"></span></a></li>
-         <li><a href="#">B</a></li>
-         <li><a href="#">C</a></li>
-         <li><a href="#">D</a></li>
-         <a href='{{url_for('item_new', list_type = list_type)}}'>Add</a>
+      <!-- TODO Add to css a .hover class so that it is hidden when not hover and auto when on hover -->
+      <ul class="nav nav-sidebar" style='max-height:300px; overflow:auto;'>
+        {% for each in alphabet %}
+         <li><a href=
+           {% if list_type == 'puppies' %}
+           '{{url_for('puppies_aZ', letter = each)}}'
+           {% endif %}
+           >{{each}}<span class="sr-only"></span></a></li>
+        {% endfor %}
       </ul>
 
     </div>
