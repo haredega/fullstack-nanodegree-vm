@@ -1,0 +1,8 @@
+Python packages dependencies
+
+Dev
+__init__.py -- allows packaging and imports the other packages
+database_setup.py --database definitions
+manage.py -- enables sqlalchemy-migrate actions
+puppypopulator.py -- populates table
+run.py

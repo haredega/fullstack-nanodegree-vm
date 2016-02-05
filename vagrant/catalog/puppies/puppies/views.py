@@ -1,4 +1,5 @@
-from flask import Flask, render_template, url_for, request, redirect, flash, jsonify
+from puppies import app
+from flask import render_template, url_for, request, redirect, flash, jsonify
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from database_setup import Base, Puppy, PuppyPage, Shelter, Owner, dbConnect
@@ -6,8 +7,6 @@ import datetime
 from sqlalchemy import func
 from numpy import size
 import string
-app = Flask(__name__)
-
 
 engine = create_engine('sqlite:///puppyshelter.db')
 Base.metadata.bind=engine
@@ -40,6 +39,7 @@ def item_view(list_type, item_id):
         q1 = session.query(Puppy, Shelter, Owner).filter(Puppy.id==item_id, Puppy.shelter_id==Shelter.id, Puppy.owner_id==Owner.id).first()
         q2 = session.query(Puppy, Shelter, Owner).filter(Puppy.id==item_id, Shelter.id==1, Puppy.owner_id==Owner.id).first()
         q3 =session.query(Puppy, Shelter, Owner).filter(Puppy.id==item_id, Puppy.shelter_id==Shelter.id, Owner.id==1).first()
+        q4 = session.query(Puppy, Shelter, Owner).filter(Puppy.id==item_id, Shelter.id==1, Owner.id==1).first()
         #If there's no corresponding Shelter, we'll send whatever shelter to the template
         if q1 is not None:
             item = q1
@@ -47,6 +47,8 @@ def item_view(list_type, item_id):
             item = q2
         elif q3 is not None:
             item = q3
+        else:
+            item = q4
         template='puppy_view.html'
     elif list_type == 'shelters':
         item = session.query(Shelter).filter(Shelter.id==item_id).first()
@@ -286,11 +288,3 @@ def puppies_aZ(letter):
     else:
         ans = render_template('list_view.html', list_type = 'puppies', items = items, now=datetime.date.today(), alphabet=alphabet )
         return ans
-
-
-
-#Starts Server
-if __name__ == '__main__':
-    app.secret_key = 'super_secret_key'
-    app.debug = True
-    app.run(host='0.0.0.0', port=5000)
