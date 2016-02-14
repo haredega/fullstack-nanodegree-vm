@@ -23,11 +23,26 @@
       <div class='row'>
         <div class='col-md-8 col-sm-8' id='profile'>
           <h1>Adding a new cat</h1>
+                  {% from "_form_helpers.html" import render_field %}
+                  <form method='POST' enctype='multipart/form-data' action='{{url_for('item_new', list_type='puppies')}}'>
+                    <dl>
+                      {{ render_field(form.name) }}
+                      {{ render_field(form.gender) }}
+                      {{ render_field(form.weight) }}
+                      {{ render_field(form.picture) }}
+                      {{ render_field(form.dateOfBirth) }}
+                      {{ render_field(form.shelter) }}
+                    </dl>
+                    <p><input type=submit value=Register>
+                    <a href="{{url_for('list_view', list_type='puppies')}}">Cancel</a>
+                  </form>
+
+
+<!-- old version
               <form method='POST' enctype='multipart/form-data' action='{{url_for('item_new', list_type='puppies')}}'>
                   <h2>Insert info about the recently arrived cat</h2>
                   Name: <input name="name" type="text" ><br>
                   Date of Birth: <input name="dateOfBirth" type="date" ><br>
-                  <!-- TODO set combo box here -->
                   Gender: <input name="gender" type="text" ><br>
                   Weight: <input name="weight" type="number" ><br>
                   Picture link: <input name="link" type="text" >
@@ -40,6 +55,7 @@
                   <input type="submit" value="Submit">
                   <a href="{{url_for('list_view', list_type='puppies')}}">Cancel</a>
               </form>
+-->
         </div>
       </div>
     </div>

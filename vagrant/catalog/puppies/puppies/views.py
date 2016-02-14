@@ -8,6 +8,7 @@ from sqlalchemy import func
 from numpy import size
 import string
 import logic
+from forms import *
 
 engine = create_engine('sqlite:///puppyshelter.db')
 Base.metadata.bind=engine
@@ -59,25 +60,47 @@ def item_view(list_type, item_id):
 @app.route('/<string:list_type>/new', methods=['GET', 'POST'])
 def item_new(list_type):
     if request.method == 'GET':
-        if list_type in ['puppies', 'shelters', 'owners'] :
-            template = list_type +'_add.html'
-            puppies = session.query(Puppy).all()
-            shelters = session.query(Shelter).all()
-            owners = session.query(Owner).all()
-            return render_template( template, list_type=list_type, puppies = puppies, shelters = shelters, owners = owners)
+        puppies = session.query(Puppy).all()
+        shelters = session.query(Shelter).all()
+        owners = session.query(Owner).all()
+        if list_type =='puppies':
+            template = 'puppies_add.html'
+            form = puppyForm()
+            form.shelter.choices = [ (g.id, g.name) for g in session.query(Shelter).all() ]
+        elif list_type =='shelters':
+            template = 'shelters_add.html'
+            form = shelterForm()
+        elif list_type == 'owners':
+            template = 'owners_add.html'
+            form = ownerForm()
         else:
-            return render_template('error404.html')
+            template = 'error404.html'
+            form = puppyForm()
+            list_type = 'puppies'
+        return render_template( template, list_type=list_type, puppies = puppies, shelters = shelters, owners = owners, form = form)
+#handles POST
     elif request.method == 'POST':
         if list_type == 'puppies':
-            thisshelter = session.query(Shelter).filter(Shelter.name==request.form['shelter']).first()
-            newItem = Puppy(name=request.form['name'], dateOfBirth=datetime.datetime.strptime(request.form['dateOfBirth'], '%Y-%m-%d').date(), gender=request.form['gender'],
-                 weight=request.form['weight'], picture=request.form['link'], shelter_id=thisshelter.id )
+            form = puppyForm(request.form)
+            form.shelter.choices = [ (g.id, g.name) for g in session.query(Shelter).all() ]
+            if form.validate():
+                thisshelter = session.query(Shelter).filter(Shelter.id==form.shelter.data).first()
+                newItem = Puppy(name=form.name.data, dateOfBirth=form.dateOfBirth.data, gender=form.gender.data,
+                     weight=form.weight.data, picture=form.picture.data, shelter_id=thisshelter.id )
+            else:
+                return redirect(url_for('item_new', list_type = list_type))
         elif list_type =='shelters':
-            newItem = Shelter(name=request.form['name'], address=request.form['address'], city = request.form['city'],
-                state = request.form['state'], zipCode = request.form['zipCode'], website = request.form['website'])
+            if form.validate():
+                newItem = Shelter(name=form.name.data, address=form.address.data, city = form.city.data,
+                    state = form.state.data, zipCode = form.zipCode.data, website = form.website.data)
+            else:
+                return redirect(url_for('item_new', list_type = list_type))
         elif list_type == 'owners':
-            newItem = Owner(name=request.form['name'], surname=request.form['surname'],
-                 gender =request.form['gender'], age = request.form['age'])
+            if form.validate():
+                newItem = Owner(name=form.name.data, surname=form.surname.data,
+                     gender =form.gender.data, age = form.age.data)
+            else:
+                return redirect(url_for('item_new', list_type = list_type))
         session.add(newItem)
         session.commit()
         flash("Succesfully added the new item!")
