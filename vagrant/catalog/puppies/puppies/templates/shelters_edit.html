@@ -23,18 +23,28 @@
     <div class='col-md-10 col-sm-9 main'>
       <div class='row'>
         <div class='col-md-8 col-sm-8' id='profile'>
-          <h1>Adding a shelter</h1>
+          {% from "_form_helpers.html" import render_field %}
               <form method='POST' enctype='multipart/form-data' action='{{url_for('item_edit', list_type='shelters', item_id=item_id)}}'>
-                  <h2>Shelter's info</h2>
-                  Name: <input name="name" type="text" placeholder='{{item.name}}' ><br>
-                  Address: <input name="address" type="text" placeholder='{{item.address}}'><br>
-                  City: <input name="city" type="text" placeholder='{{item.city}}'><br>
-                  State: <input name="state" type="text" placeholder='{{item.state}}'><br>
-                  Zip Code: <input name="zipCode" type="text" placeholder='{{item.zipCode}}'><br>
-                  Website: <input name="website" type='text' placeholder='{{item.website}}' >
-                  <input type="submit" value="Submit">
-                  <a href="{{url_for('item_view', list_type=list_type, item_id=item_id)}}">Cancel</a>
-              </form>
+                  <h2>Insert info about the shelter</h2>
+                  <dl>
+                    {{ render_field(form.name, item.name) }}
+                    {{ render_field(form.address, item.address) }}
+                    {{ render_field(form.city, item.city) }}
+                    {{ render_field(form.state, item.state) }}
+                    {{ render_field(form.zipCode, item.zipCode) }}
+                    {{ render_field(form.website, item.website) }}
+                  </dl>
+                    <p><input type=submit value=Update>
+                      <a href="{{url_for('item_view', list_type='shelters', item_id=item_id)}}">Cancel</a>
+                </form>
+        </div>
+        <div class='col-md-4 col-sm-4' id='profile'>
+          <br /><br /><br /><br />
+          <p>Shelter: {{item.name}}  </p>
+          <p>Address: {{item.address}}, {{item.city}}</p>
+          <p>State: {{item.state}}  </p>
+          <p>Zip Code: {{item.zipCode}}          </p>
+          <p>Website: <a href='//{{item.website}}'>{{item.name}} </a></p><br>
         </div>
       </div>
     </div>

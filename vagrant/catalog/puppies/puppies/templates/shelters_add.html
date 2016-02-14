@@ -23,9 +23,22 @@
       <div class='row'>
         <div class='col-md-8 col-sm-8' id='profile'>
           <h1>Adding a shelter</h1>
+              {% from "_form_helpers.html" import render_field %}
               <form method='POST' enctype='multipart/form-data' action='{{url_for('item_new', list_type='shelters')}}'>
                   <h2>Insert info about the shelter</h2>
-                  Name: <input name="name" type="text" ><br>
+                  <dl>
+                    {{ render_field(form.name) }}
+                    {{ render_field(form.address) }}
+                    {{ render_field(form.city) }}
+                    {{ render_field(form.state) }}
+                    {{ render_field(form.zipCode) }}
+                    {{ render_field(form.website) }}
+                  </dl>
+                    <p><input type=submit value=Register>
+                      <a href="{{url_for('list_view', list_type='shelters')}}">Cancel</a>
+                </form>
+
+<!--                  Name: <input name="name" type="text" ><br>
                   Address: <input name="address" type="text" ><br>
                   City: <input name="city" type="text" ><br>
                   State: <input name="state" type="text" ><br>
@@ -33,7 +46,7 @@
                   Website: <input name="website" type='text' >
                   <input type="submit" value="Submit">
                   <a href="{{url_for('list_view', list_type='shelters')}}">Cancel</a>
-              </form>
+              </form> -->
         </div>
       </div>
     </div>

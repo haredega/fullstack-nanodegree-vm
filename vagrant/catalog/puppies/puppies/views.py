@@ -90,10 +90,12 @@ def item_new(list_type):
             else:
                 return redirect(url_for('item_new', list_type = list_type))
         elif list_type =='shelters':
+            form = shelterForm(request.form)
             if form.validate():
                 newItem = Shelter(name=form.name.data, address=form.address.data, city = form.city.data,
                     state = form.state.data, zipCode = form.zipCode.data, website = form.website.data)
             else:
+                print 'Did not validate'
                 return redirect(url_for('item_new', list_type = list_type))
         elif list_type == 'owners':
             if form.validate():
@@ -137,9 +139,11 @@ def item_edit(list_type, item_id):
         item = session.query(Puppy).filter(Puppy.id==item_id).first()
         template = 'puppies_edit.html'
     elif list_type == 'shelters':
+        form = shelterForm()
         item = session.query(Shelter).filter(Shelter.id==item_id).first()
         template = 'shelters_edit.html'
     elif list_type == 'owners':
+        form = ownerForm()
         item = session.query(Owner).filter(Owner.id==item_id).first()
         template = 'owners_edit.html'
     else:
@@ -161,12 +165,19 @@ def item_edit(list_type, item_id):
             item.shelter_id = form.shelter.data
             print 'post 132'
         elif list_type =='shelters':
-            item.name=request.form['name']
-            item.address=request.form['address']
-            item.city = request.form['city']
-            item.state = request.form['state']
-            item.zipCode = request.form['zipCode']
-            item.website = request.form['website']
+            form = shelterForm(request.form)
+            print form.name.data
+            print form.address.data
+            print form.city.data
+            print form.state.data
+            print form.zipCode.data
+            print form.website.data
+            item.name=form.name.data
+            item.address=form.address.data
+            item.city = form.city.data
+            item.state = form.state.data
+            item.zipCode = form.zipCode.data
+            item.website = form.website.data
         elif list_type == 'owners':
             item.name=request.form['name']
             item.surname=request.form['surname']

@@ -11,7 +11,7 @@ class puppyForm(Form):
     picture = TextField('picture')
 
 class shelterForm(Form):
-    shelter = TextField('name', [validators.Required(), validators.Length(min=4, max=140)])
+    name = TextField('name', [validators.Required(), validators.Length(min=4, max=140)])
     address = TextField('address')
     city = TextField('city', [validators.Required()])
     state = TextField('state', [validators.Required()])
