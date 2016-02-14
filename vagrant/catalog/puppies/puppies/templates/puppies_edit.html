@@ -23,24 +23,31 @@
     <div class='col-md-10 col-sm-9 main'>
       <div class='row'>
         <div class='col-md-8 col-sm-8' id='profile'>
-          <h1>Editing a new cat</h1>
-              <form method='POST' enctype='multipart/form-data' action='{{url_for('item_edit', list_type=list_type, item_id=item.id)}}'>
-                  <h2>What has changes about this cat?</h2>
-                  Name: <input name="name" type="text" placeholder="{{item.name}}"><br>
-                  Date of Birth: <input name="dateOfBirth" type="datetime" placeholder="{{item.dateOfBirth}}"><br>
-                  <!-- TODO set combo box here -->
-                  Gender: <input name="gender" type="text" placeholder="{{item.gender}}"><br>
-                  Weight: <input name="weight" type="number" placeholder="{{item.weight}}"><br>
-                  Picture link: <input name="link" type="text" placeholder="{{item.link}}"><br>
-                  Is he in a shelter? If so, which? <input name="shelter" list='all_shelters' >
-                    <datalist id='all_shelters'>
-                      {% for item in shelters %}
-                       <option value='{{item.id}}'>{{item.name}}</option>
-                      {% endfor %}
-                    </datalist><br>
-                  <input type="submit" value="Submit">
-                  <a href="{{url_for('item_view', list_type=list_type, item_id=item_id)}}">Cancel</a>
-              </form>
+          <h1>Editing {{item.name}}</h1>
+          {% from "_form_helpers.html" import render_field, render_field2 %}
+          <form method='POST' enctype='multipart/form-data' action='{{url_for('item_edit', list_type='puppies', item_id=item_id)}}'>
+            <dl>
+              {{ render_field(form.name, item.name) }}
+              {{ render_field(form.gender, item.gender) }}
+              {{ render_field(form.weight, item.weight) }}
+              {{ render_field(form.picture, item.picture) }}
+              {{ render_field(form.dateOfBirth) }}
+              {{ render_field(form.shelter) }}
+            </dl>
+            <p><input type=submit value=Register>
+            <a href="{{url_for('item_view', list_type=list_type, item_id=item_id)}}">Cancel</a>
+          </form>
+        </div>
+        <div class='col-md-4 col-sm-4' id='profile'>
+          <h1>Verification</h1>
+          <p>Name: {{item.name}}</p>
+          <p>Date of birth: {{item.dateOfBirth}}</p>
+          <p>Gender: {{item.gender}}</p>
+          <p>Weight: {{item.weight}}</p>
+          {% if item.shelter_id is not none %}
+          <p>Location: {{item.shelter_id}}</p>
+          {% endif %}
+          <p>Other info: ?</p>
         </div>
       </div>
     </div>

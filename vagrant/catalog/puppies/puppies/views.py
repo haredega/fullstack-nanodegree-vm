@@ -132,6 +132,8 @@ def item_delete(list_type, item_id):
 @app.route('/<string:list_type>/edit/<int:item_id>', methods=['GET', 'POST'])
 def item_edit(list_type, item_id):
     if list_type == 'puppies':
+        form = puppyForm()
+        form.shelter.choices = [ (g.id, g.name) for g in session.query(Shelter).order_by(Shelter.id).all() ]
         item = session.query(Puppy).filter(Puppy.id==item_id).first()
         template = 'puppies_edit.html'
     elif list_type == 'shelters':
@@ -146,16 +148,17 @@ def item_edit(list_type, item_id):
     shelters = session.query(Shelter).all()
 
     if request.method == 'GET':
-        ans = render_template( template, list_type=list_type, item_id = item_id, item = item, shelters=shelters)
+        ans = render_template( template, list_type=list_type, item_id = item_id, item = item, shelters=shelters, form=form)
         return ans
     elif request.method == 'POST':
         if list_type == 'puppies':
-            item.name=request.form['name']
-            item.dateOfBirth=datetime.datetime.strptime(request.form['dateOfBirth'], '%Y-%m-%d').date()
-            item.gender=request.form['gender']
-            item.weight=request.form['weight']
-            item.picture=request.form['link']
-            item.shelter_id = request.form['shelter']
+            form = puppyForm(request.form)
+            item.name=form.name.data
+            item.dateOfBirth=form.dateOfBirth.data
+            item.gender=form.gender.data
+            item.weight=form.weight.data
+            item.picture=form.picture.data
+            item.shelter_id = form.shelter.data
             print 'post 132'
         elif list_type =='shelters':
             item.name=request.form['name']

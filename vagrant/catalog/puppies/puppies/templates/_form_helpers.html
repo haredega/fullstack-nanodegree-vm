@@ -1,6 +1,10 @@
-{% macro render_field(field) %}
+{% macro render_field(field, placeholder) %}
   <dt>{{ field.label }}
+  {% if placeholder is none %}
   <dd>{{ field(**kwargs)|safe }}
+  {% else %}
+  <dd>{{ field(placeholder = placeholder, **kwargs)|safe }}
+  {% endif %}
   {% if field.errors %}
     <ul class=errors>
     {% for error in field.errors %}
