@@ -23,17 +23,24 @@
     <div class='col-md-10 col-sm-9 main'>
       <div class='row'>
         <div class='col-md-8 col-sm-8' id='profile'>
-          <h1>Editing an Owner</h1>
+          {% from "_form_helpers.html" import render_field %}
               <form method='POST' enctype='multipart/form-data' action='{{url_for('item_edit', list_type='owners', item_id=item.id)}}'>
-                  <h2>Insert info about the person</h2>
-                  Name: <input name="name" type="text" placeholder='{{item.name}}' ><br>
-                  Surname: <input name="surname" type="text" placeholder='{{item.surname}}' ><br>
-                  <!-- TODO ad combobox here -->
-                  Gender: <input name="gender" type="text" placeholder='{{item.gender}}'><br>
-                  Age: <input name="age" type="number" placeholder='{{item.age}}' ><br>
-                  <input type="submit" value="Submit">
+                  <h2>Edit personnal info</h2>
+                  <dl>
+                    {{ render_field(form.name, item.name) }}
+                    {{ render_field(form.surname, item.surname) }}
+                    {{ render_field(form.gender, item.gender) }}
+                    {{ render_field(form.age, item.age) }}
+                  </dl>
+                  <input type="submit" value="Update">
                   <a href="{{url_for('item_view', list_type=list_type, item_id=item_id)}}">Cancel</a>
               </form>
+        </div>
+        <div class='col-md-4 col-sm-4' id='profile'>
+          <br /><br /><br />
+          <p>Name: {{item.name}} {{item.surname}}    </p>
+          <p>Gender: {{item.gender}}</p>
+          <p>Age: {{item.age}}  </p>
         </div>
       </div>
     </div>

@@ -95,9 +95,9 @@ def item_new(list_type):
                 newItem = Shelter(name=form.name.data, address=form.address.data, city = form.city.data,
                     state = form.state.data, zipCode = form.zipCode.data, website = form.website.data)
             else:
-                print 'Did not validate'
                 return redirect(url_for('item_new', list_type = list_type))
         elif list_type == 'owners':
+            form = ownerForm(request.form)
             if form.validate():
                 newItem = Owner(name=form.name.data, surname=form.surname.data,
                      gender =form.gender.data, age = form.age.data)
@@ -135,16 +135,39 @@ def item_delete(list_type, item_id):
 def item_edit(list_type, item_id):
     if list_type == 'puppies':
         form = puppyForm()
-        form.shelter.choices = [ (g.id, g.name) for g in session.query(Shelter).order_by(Shelter.id).all() ]
         item = session.query(Puppy).filter(Puppy.id==item_id).first()
+        form.shelter.choices = [ (g.id, g.name) for g in session.query(Shelter).order_by(Shelter.id).all() ]
+        form.shelter.choices.append([0, ''])
+        form.name.default = item.name
+        form.gender.default = item.gender
+        form.weight.default = item.weight
+        form.picture.default = item.picture
+        form.dateOfBirth.default = item.dateOfBirth
+        if item.shelter_id is not None:
+            form.shelter.default = item.shelter_id
+        else:
+            form.shelter.default = 0
+        form.process()
         template = 'puppies_edit.html'
     elif list_type == 'shelters':
         form = shelterForm()
         item = session.query(Shelter).filter(Shelter.id==item_id).first()
+        form.name.default = item.name
+        form.address.default = item.address
+        form.city.default = item.city
+        form.state.default = item.state
+        form.zipCode.default = item.zipCode
+        form.website.default = item.website
+        form.process()
         template = 'shelters_edit.html'
     elif list_type == 'owners':
         form = ownerForm()
         item = session.query(Owner).filter(Owner.id==item_id).first()
+        form.name.default = item.name
+        form.surname.default = item.surname
+        form.age.default = item.age
+        form.gender.default = item.gender
+        form.process()
         template = 'owners_edit.html'
     else:
         return render_template('error404.html')
@@ -160,18 +183,17 @@ def item_edit(list_type, item_id):
             item.name=form.name.data
             item.dateOfBirth=form.dateOfBirth.data
             item.gender=form.gender.data
-            item.weight=form.weight.data
+            if form.weight.data is None:
+                pass
+            else:
+                item.weight=form.weight.data
             item.picture=form.picture.data
-            item.shelter_id = form.shelter.data
-            print 'post 132'
+            if form.shelter.data ==0:
+                item.shelter_id = None
+            else:
+                item.shelter_id = form.shelter.data
         elif list_type =='shelters':
             form = shelterForm(request.form)
-            print form.name.data
-            print form.address.data
-            print form.city.data
-            print form.state.data
-            print form.zipCode.data
-            print form.website.data
             item.name=form.name.data
             item.address=form.address.data
             item.city = form.city.data
@@ -179,16 +201,14 @@ def item_edit(list_type, item_id):
             item.zipCode = form.zipCode.data
             item.website = form.website.data
         elif list_type == 'owners':
-            item.name=request.form['name']
-            item.surname=request.form['surname']
-            item.gender =request.form['gender']
-            item.age = request.form['age']
-        print '3'
+            form = ownerForm(request.form)
+            item.name=form.name.data
+            item.surname=form.surname.data
+            item.gender =form.gender.data
+            item.age = form.age.data
         session.add(item)
         session.commit()
-        print '4'
         flash("Succesfully edited the item!")
-        print '5'
         return redirect(url_for('list_view', list_type=list_type))
 
 @app.route('/<string:list_type>/adopt/<int:item_id>')

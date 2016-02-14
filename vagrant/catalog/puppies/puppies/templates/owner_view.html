@@ -78,8 +78,8 @@
                 <input type="submit" value="Submit" class="btn">
               </form> -->
           <ul class="nav nav-sidebar">
-             <li><a href="#">Edit</a></li>
-             <li><a href="#">Delete</a></li>
+             <li><a href="{{url_for('item_edit', list_type=list_type, item_id=item_id)}}">Edit</a></li>
+             <li><a href="{{url_for('item_delete', list_type=list_type, item_id=item_id)}}">Delete</a></li>
           </ul>
         </div>
     </div>
