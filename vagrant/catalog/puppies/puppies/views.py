@@ -88,6 +88,9 @@ def item_new(list_type):
                 newItem = Puppy(name=form.name.data, dateOfBirth=form.dateOfBirth.data, gender=form.gender.data,
                      weight=form.weight.data, picture=form.picture.data, shelter_id=thisshelter.id )
             else:
+                for fieldName, errorMessages in form.errors.iteritems():
+                    for err in errorMessages:
+                        flash('Error in '+fieldName+' field. '+err)
                 return redirect(url_for('item_new', list_type = list_type))
         elif list_type =='shelters':
             form = shelterForm(request.form)
@@ -95,6 +98,9 @@ def item_new(list_type):
                 newItem = Shelter(name=form.name.data, address=form.address.data, city = form.city.data,
                     state = form.state.data, zipCode = form.zipCode.data, website = form.website.data)
             else:
+                for fieldName, errorMessages in form.errors.iteritems():
+                    for err in errorMessages:
+                        flash('Error in '+fieldName+' field. '+err)
                 return redirect(url_for('item_new', list_type = list_type))
         elif list_type == 'owners':
             form = ownerForm(request.form)
@@ -102,10 +108,13 @@ def item_new(list_type):
                 newItem = Owner(name=form.name.data, surname=form.surname.data,
                      gender =form.gender.data, age = form.age.data)
             else:
+                for fieldName, errorMessages in form.errors.iteritems():
+                    for err in errorMessages:
+                        flash('Error in '+fieldName+' field. '+err)
                 return redirect(url_for('item_new', list_type = list_type))
         session.add(newItem)
         session.commit()
-        flash("Succesfully added the new item!")
+        flash("Succesfully added "+form.name.data+"!")
         return redirect(url_for('list_view', list_type=list_type))
 
 @app.route('/<string:list_type>/del/<int:item_id>', methods=['GET', 'POST'])
@@ -180,6 +189,13 @@ def item_edit(list_type, item_id):
     elif request.method == 'POST':
         if list_type == 'puppies':
             form = puppyForm(request.form)
+            form.shelter.choices = [ (g.id, g.name) for g in session.query(Shelter).order_by(Shelter.id).all() ]
+            form.shelter.choices.append([0, ''])
+            if not form.validate():
+                for fieldName, errorMessages in form.errors.iteritems():
+                    for err in errorMessages:
+                        flash('Error in '+fieldName+' field. '+err)
+                return redirect(url_for('item_edit', list_type = list_type, item_id=item_id))
             item.name=form.name.data
             item.dateOfBirth=form.dateOfBirth.data
             item.gender=form.gender.data
@@ -194,6 +210,11 @@ def item_edit(list_type, item_id):
                 item.shelter_id = form.shelter.data
         elif list_type =='shelters':
             form = shelterForm(request.form)
+            if not form.validate():
+                for fieldName, errorMessages in form.errors.iteritems():
+                    for err in errorMessages:
+                        flash('Error in '+fieldName+' field. '+err)
+                return redirect(url_for('item_edit', list_type = list_type, item_id=item_id))
             item.name=form.name.data
             item.address=form.address.data
             item.city = form.city.data
@@ -202,13 +223,18 @@ def item_edit(list_type, item_id):
             item.website = form.website.data
         elif list_type == 'owners':
             form = ownerForm(request.form)
+            if not form.validate():
+                for fieldName, errorMessages in form.errors.iteritems():
+                    for err in errorMessages:
+                        flash('Error in '+fieldName+' field. '+err)
+                return redirect(url_for('item_edit', list_type = list_type, item_id=item_id))
             item.name=form.name.data
             item.surname=form.surname.data
             item.gender =form.gender.data
             item.age = form.age.data
         session.add(item)
         session.commit()
-        flash("Succesfully edited the item!")
+        flash("Succesfully edited "+form.name.data+"!")
         return redirect(url_for('list_view', list_type=list_type))
 
 @app.route('/<string:list_type>/adopt/<int:item_id>')

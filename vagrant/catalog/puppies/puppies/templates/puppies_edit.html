@@ -23,6 +23,17 @@
     <div class='col-md-10 col-sm-9 main'>
       <div class='row'>
         <div class='col-md-8 col-sm-8' id='profile'>
+          <!--MESSAGE FLASHING EXAMPLE -->
+              {% with messages = get_flashed_messages() %}
+                  {% if messages %}
+
+                  <ul>
+                  {% for message in messages %}
+                    <li><strong>{{message}}</strong></li>
+                    {% endfor %}
+                  </ul>
+                  {% endif %}
+              {% endwith %}
           <h1>Editing {{item.name}}</h1>
           {% from "_form_helpers.html" import render_field, render_field2 %}
           <form method='POST' enctype='multipart/form-data' action='{{url_for('item_edit', list_type='puppies', item_id=item_id)}}'>
@@ -39,6 +50,7 @@
           </form>
         </div>
         <div class='col-md-4 col-sm-4' id='profile'>
+          <br /><br>
           <h1>Verification</h1>
           <p>Name: {{item.name}}</p>
           <p>Date of birth: {{item.dateOfBirth}}</p>
@@ -48,6 +60,7 @@
           <p>Location: {{item.shelter_id}}</p>
           {% endif %}
           <p>Other info: ?</p>
+          <p>** Ensure picture URL is like http://website_url.com</p>
         </div>
       </div>
     </div>

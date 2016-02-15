@@ -23,6 +23,17 @@
     <div class='col-md-10 col-sm-9 main'>
       <div class='row'>
         <div class='col-md-8 col-sm-8' id='profile'>
+          <!--MESSAGE FLASHING EXAMPLE -->
+              {% with messages = get_flashed_messages() %}
+                  {% if messages %}
+
+                  <ul>
+                  {% for message in messages %}
+                    <li><strong>{{message}}</strong></li>
+                    {% endfor %}
+                  </ul>
+                  {% endif %}
+              {% endwith %}
           {% from "_form_helpers.html" import render_field %}
               <form method='POST' enctype='multipart/form-data' action='{{url_for('item_edit', list_type='shelters', item_id=item_id)}}'>
                   <h2>Insert info about the shelter</h2>
@@ -45,6 +56,7 @@
           <p>State: {{item.state}}  </p>
           <p>Zip Code: {{item.zipCode}}          </p>
           <p>Website: <a href='//{{item.website}}'>{{item.name}} </a></p><br>
+          <p>** Ensure website URL is in the http://website_url.com format</p>
         </div>
       </div>
     </div>

@@ -22,6 +22,17 @@
     <div class='col-md-10 col-sm-9 main'>
       <div class='row'>
         <div class='col-md-8 col-sm-8' id='profile'>
+          <!--MESSAGE FLASHING EXAMPLE -->
+              {% with messages = get_flashed_messages() %}
+                  {% if messages %}
+
+                  <ul>
+                  {% for message in messages %}
+                    <li><strong>{{message}}</strong></li>
+                    {% endfor %}
+                  </ul>
+                  {% endif %}
+              {% endwith %}          
           <h1>Adding a shelter</h1>
               {% from "_form_helpers.html" import render_field %}
               <form method='POST' enctype='multipart/form-data' action='{{url_for('item_new', list_type='shelters')}}'>
@@ -35,7 +46,7 @@
                     {{ render_field(form.website) }}
                   </dl>
                     <p><input type=submit value=Register>
-                      <a href="{{url_for('list_view', list_type='shelters')}}">Cancel</a>
+                      <a href="{{url_for('list_view', list_type='shelters')}}">Cancel</a><br>
                 </form>
 
 <!--                  Name: <input name="name" type="text" ><br>

@@ -23,6 +23,17 @@
     <div class='col-md-10 col-sm-9 main'>
       <div class='row'>
         <div class='col-md-8 col-sm-8' id='profile'>
+          <!--MESSAGE FLASHING EXAMPLE -->
+              {% with messages = get_flashed_messages() %}
+                  {% if messages %}
+
+                  <ul>
+                  {% for message in messages %}
+                    <li><strong>{{message}}</strong></li>
+                    {% endfor %}
+                  </ul>
+                  {% endif %}
+              {% endwith %}
           {% from "_form_helpers.html" import render_field %}
               <form method='POST' enctype='multipart/form-data' action='{{url_for('item_edit', list_type='owners', item_id=item.id)}}'>
                   <h2>Edit personnal info</h2>
