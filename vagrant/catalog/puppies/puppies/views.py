@@ -19,7 +19,7 @@ DBSession = sessionmaker(bind = engine)
 session = DBSession()
 
 # Sets up logger and the handler
-LOG_FILENAME = 'puppylog2.log'
+LOG_FILENAME = 'log/puppylog_'+'.log'
 log_format = '%(asctime)s  - %(levelname)s -  %(message)s'
 log_dtfmt='%d/%m/%Y %I:%M:%S %p'
 """logging.basicConfig(format=log_format, datefmt=log_dtfmt)
